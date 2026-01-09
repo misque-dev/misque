@@ -10,11 +10,10 @@ export class QuranError extends Error {
     super(message);
     this.name = 'QuranError';
     // V8 engines (Node.js, Chrome) have captureStackTrace
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
+    type CaptureStackTrace = (target: object, constructorOpt?: Function) => void;
     const ErrorWithCapture = Error as typeof Error & {
-      captureStackTrace?: (
-        target: object,
-        constructorOpt?: new (...args: unknown[]) => unknown
-      ) => void;
+      captureStackTrace?: CaptureStackTrace;
     };
     if (typeof ErrorWithCapture.captureStackTrace === 'function') {
       ErrorWithCapture.captureStackTrace(this, QuranError);
