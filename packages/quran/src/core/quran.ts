@@ -18,7 +18,7 @@ import {
 import { validateSurahNumber, validateAyahNumber } from '../utils/validation';
 import { ReciterManager } from './reciter-manager';
 import { AudioManager } from './audio-manager';
-import type { QuranSession } from './quran-session';
+import { QuranSession } from './quran-session';
 
 /**
  * Main Quran class providing access to Quran text and audio data
@@ -537,11 +537,6 @@ export class Quran {
    * Create a simplified session for working with a specific reciter
    */
   withReciter(reciterId: string): QuranSession {
-    // Dynamic import to avoid circular dependency
-     
-    const { QuranSession: QuranSessionClass } = require('./quran-session') as {
-      QuranSession: typeof import('./quran-session').QuranSession;
-    };
-    return new QuranSessionClass(this, reciterId);
+    return new QuranSession(this, reciterId);
   }
 }
