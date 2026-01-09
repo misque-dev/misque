@@ -9,8 +9,12 @@ export class QuranError extends Error {
   ) {
     super(message);
     this.name = 'QuranError';
-    if (typeof Error.captureStackTrace === 'function') {
-      Error.captureStackTrace(this, QuranError);
+    // V8 engines (Node.js, Chrome) have captureStackTrace
+    const ErrorWithCapture = Error as typeof Error & {
+      captureStackTrace?: (target: object, constructor?: Function) => void;
+    };
+    if (typeof ErrorWithCapture.captureStackTrace === 'function') {
+      ErrorWithCapture.captureStackTrace(this, QuranError);
     }
   }
 }
