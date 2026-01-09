@@ -1,0 +1,68 @@
+{
+  "name": "@misque/hijri",
+  "version": "0.2.0",
+  "description": "Hijri (Islamic) calendar conversion and utilities",
+  "keywords": [
+    "hijri",
+    "islamic",
+    "muslim",
+    "calendar",
+    "date",
+    "lunar"
+  ],
+  "license": "MIT",
+  "author": "Misque Contributors",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/misque/misque.git",
+    "directory": "packages/hijri"
+  },
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    }
+  },
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "sideEffects": false,
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "lint": "eslint src/",
+    "lint:fix": "eslint src/ --fix",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "typecheck": "tsc --noEmit",
+    "clean": "rm -rf dist coverage .turbo"
+  },
+  "dependencies": {
+    "@misque/core": "workspace:*"
+  },
+  "devDependencies": {
+    "@misque/typescript-config": "workspace:*",
+    "@misque/vitest-config": "workspace:*",
+    "tsup": "^8.3.0",
+    "typescript": "^5.7.0",
+    "vitest": "^2.1.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

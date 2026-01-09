@@ -1,0 +1,12 @@
+{
+  "title": "Misque",
+  "pages": [
+    "index",
+    "getting-started",
+    "---Packages---",
+    "packages/quran",
+    "packages/prayer-times",
+    "packages/hijri",
+    "packages/qibla"
+  ]
+}

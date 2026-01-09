@@ -1,0 +1,119 @@
+---
+title: "@misque/hijri"
+description: Hijri (Islamic) calendar conversion and utilities.
+---
+
+# @misque/hijri
+
+Convert between Gregorian and Hijri calendars with formatting support.
+
+## Installation
+
+```bash
+pnpm add @misque/hijri
+```
+
+## Quick Start
+
+```typescript
+import { gregorianToHijri, formatHijriDate } from '@misque/hijri';
+
+const today = new Date();
+const hijri = gregorianToHijri(today);
+console.log(hijri); // { year: 1446, month: 6, day: 15 }
+
+const formatted = formatHijriDate(hijri);
+console.log(formatted); // "15 Jumada al-Thani 1446"
+```
+
+## Conversion
+
+### Gregorian to Hijri
+
+```typescript
+import { gregorianToHijri } from '@misque/hijri';
+
+const hijri = gregorianToHijri(new Date(2024, 0, 1));
+// { year: 1445, month: 6, day: 19 }
+```
+
+### Hijri to Gregorian
+
+```typescript
+import { hijriToGregorian } from '@misque/hijri';
+
+const gregorian = hijriToGregorian({ year: 1446, month: 1, day: 1 });
+// Date object
+```
+
+## Formatting
+
+```typescript
+import { formatHijriDate } from '@misque/hijri';
+
+const hijri = { year: 1446, month: 9, day: 1 };
+
+// Default format (English)
+formatHijriDate(hijri);
+// "1 Ramadan 1446"
+
+// Arabic month names
+formatHijriDate(hijri, { locale: 'ar' });
+
+// Custom format
+formatHijriDate(hijri, { format: 'short' });
+// "1/9/1446"
+```
+
+## Month Names
+
+```typescript
+import { getHijriMonthName, getHijriMonthNames } from '@misque/hijri';
+
+// Get a specific month name
+getHijriMonthName(9); // "Ramadan"
+getHijriMonthName(9, 'ar'); // "رمضان"
+
+// Get all month names
+const months = getHijriMonthNames();
+// ["Muharram", "Safar", "Rabi al-Awwal", ...]
+```
+
+## Utilities
+
+```typescript
+import {
+  isLeapYear,
+  getDaysInMonth,
+  getDaysInYear,
+} from '@misque/hijri';
+
+// Check if Hijri year is a leap year
+isLeapYear(1446); // true or false
+
+// Get days in a Hijri month
+getDaysInMonth(1446, 9); // 30 (Ramadan)
+
+// Get days in a Hijri year
+getDaysInYear(1446); // 354 or 355
+```
+
+## Islamic Events
+
+```typescript
+import { getIslamicEvents } from '@misque/hijri';
+
+// Get events for a specific Hijri date
+const events = getIslamicEvents({ year: 1446, month: 9, day: 1 });
+// ["First day of Ramadan"]
+```
+
+## Types
+
+```typescript
+import type {
+  HijriDate,
+  HijriFormatOptions,
+  HijriLocale,
+} from '@misque/hijri';
+```

@@ -1,0 +1,118 @@
+---
+title: "@misque/qibla"
+description: Calculate Qibla direction from any coordinates.
+---
+
+# @misque/qibla
+
+Calculate the Qibla direction (toward Kaaba in Makkah) from any location.
+
+## Installation
+
+```bash
+pnpm add @misque/qibla
+```
+
+## Quick Start
+
+```typescript
+import { calculateQiblaDirection } from '@misque/qibla';
+
+const location = {
+  latitude: 51.5074,
+  longitude: -0.1278, // London
+};
+
+const direction = calculateQiblaDirection(location);
+console.log(direction); // 118.98 (degrees from North)
+```
+
+## Direction Calculation
+
+The Qibla direction is calculated as the bearing from the given location to the Kaaba in Makkah (21.4225N, 39.8262E).
+
+```typescript
+import { calculateQiblaDirection } from '@misque/qibla';
+
+// From New York
+const nyDirection = calculateQiblaDirection({
+  latitude: 40.7128,
+  longitude: -74.006,
+});
+// ~58.48 degrees (roughly ENE)
+
+// From Tokyo
+const tokyoDirection = calculateQiblaDirection({
+  latitude: 35.6762,
+  longitude: 139.6503,
+});
+// ~293.02 degrees (roughly WNW)
+```
+
+## Compass Direction
+
+Convert the bearing to a compass direction:
+
+```typescript
+import {
+  calculateQiblaDirection,
+  getCompassDirection,
+} from '@misque/qibla';
+
+const bearing = calculateQiblaDirection({ latitude: 51.5074, longitude: -0.1278 });
+const compass = getCompassDirection(bearing);
+console.log(compass); // "ESE"
+```
+
+### Compass Points
+
+| Range | Direction |
+|-------|-----------|
+| 337.5 - 22.5 | N |
+| 22.5 - 67.5 | NE |
+| 67.5 - 112.5 | E |
+| 112.5 - 157.5 | SE |
+| 157.5 - 202.5 | S |
+| 202.5 - 247.5 | SW |
+| 247.5 - 292.5 | W |
+| 292.5 - 337.5 | NW |
+
+## Distance to Kaaba
+
+```typescript
+import { getDistanceToKaaba } from '@misque/qibla';
+
+const location = { latitude: 51.5074, longitude: -0.1278 };
+const distance = getDistanceToKaaba(location);
+console.log(distance); // ~4585 km
+```
+
+## Compass Integration
+
+For use with device compass (requires magnetometer):
+
+```typescript
+import { calculateQiblaDirection } from '@misque/qibla';
+
+// Get Qibla bearing
+const qiblaBearing = calculateQiblaDirection(userLocation);
+
+// In your compass event handler:
+function onCompassUpdate(deviceHeading: number) {
+  // Calculate the difference between device heading and Qibla
+  const qiblaRelative = (qiblaBearing - deviceHeading + 360) % 360;
+
+  // qiblaRelative is how many degrees to rotate your Qibla indicator
+  // 0 = facing Qibla, 90 = Qibla is to the right, etc.
+}
+```
+
+## Types
+
+```typescript
+import type {
+  Coordinates,
+  QiblaResult,
+  CompassDirection,
+} from '@misque/qibla';
+```

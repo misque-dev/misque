@@ -1,0 +1,129 @@
+---
+title: "@misque/quran"
+description: Quran text, translations, audio, and search APIs for JavaScript applications.
+---
+
+# @misque/quran
+
+Complete Quran data access with support for text, translations, audio, and search.
+
+## Installation
+
+```bash
+pnpm add @misque/quran
+```
+
+## Quick Start
+
+```typescript
+import { createQuran } from '@misque/quran';
+
+const quran = createQuran();
+
+// Get all surahs
+const surahs = quran.getAllSurahs();
+console.log(`Total surahs: ${surahs.length}`); // 114
+
+// Get a specific surah
+const fatiha = quran.getSurah(1);
+console.log(fatiha?.englishName); // "Al-Fatiha"
+console.log(fatiha?.numberOfAyahs); // 7
+
+// Get a specific ayah
+const ayah = quran.getAyah(1, 1);
+console.log(ayah?.text); // Arabic text of Bismillah
+```
+
+## Factory Functions
+
+### createQuran()
+
+Creates a Quran instance with all data loaded.
+
+```typescript
+const quran = createQuran();
+```
+
+### createQuranSession(reciterId)
+
+Creates a simplified session for working with a specific reciter.
+
+```typescript
+const session = createQuranSession('alzain');
+
+// Get all surahs available for this reciter
+const surahs = session.surahs;
+
+// Get player data for a surah
+const { audioUrl, fullText, surah } = session.getPlayerData(1);
+```
+
+### createQuranWithReciter(reciterId)
+
+Creates a Quran instance with a preferred reciter pre-set.
+
+```typescript
+const quran = createQuranWithReciter('alzain');
+const audioUrl = quran.getSurahAudioUrl(1);
+```
+
+## Searching
+
+```typescript
+const results = quran.search('mercy', {
+  language: 'en',
+  limit: 10,
+  searchArabic: true,
+  searchTranslations: true,
+});
+
+results.forEach((result) => {
+  console.log(`${result.surah.englishName}:${result.ayah.number}`);
+  console.log(result.snippet);
+});
+```
+
+## Pagination
+
+```typescript
+// Paginated surahs
+const page = quran.getSurahsPaginated({ page: 1, pageSize: 10 });
+console.log(page.items); // First 10 surahs
+console.log(page.hasNext); // true
+
+// Paginated search
+const searchPage = quran.searchPaginated('mercy', { page: 1, pageSize: 10 });
+```
+
+## Filtering
+
+```typescript
+// Get only Meccan surahs
+const meccan = quran.getSurahs({ revelationType: 'Meccan' });
+
+// Get surahs with more than 100 ayahs
+const long = quran.getSurahs({ minAyahs: 100 });
+```
+
+## Audio
+
+```typescript
+// Get audio URL for a specific ayah
+const url = quran.getAudioUrl('alzain', 1, 1);
+
+// Get all audio URLs for a surah
+const urls = quran.getSurahAudioUrls('alzain', 1);
+```
+
+## Types
+
+```typescript
+import type {
+  Surah,
+  Ayah,
+  Reciter,
+  SearchResult,
+  FilterOptions,
+  PaginatedResult,
+} from '@misque/quran';
+```

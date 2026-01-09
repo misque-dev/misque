@@ -1,0 +1,140 @@
+---
+title: "@misque/prayer-times"
+description: Accurate Islamic prayer time calculations for any location.
+---
+
+# @misque/prayer-times
+
+Calculate Islamic prayer times for any location using various calculation methods.
+
+## Installation
+
+```bash
+pnpm add @misque/prayer-times
+```
+
+## Quick Start
+
+```typescript
+import {
+  calculatePrayerTimes,
+  getDefaultParams,
+  formatPrayerTimes,
+} from '@misque/prayer-times';
+
+const location = {
+  latitude: 21.4225,
+  longitude: 39.8262, // Makkah
+};
+
+const params = getDefaultParams();
+const result = calculatePrayerTimes(new Date(), location, params);
+
+if (result.success) {
+  const formatted = formatPrayerTimes(result.data);
+  console.log(formatted);
+  // { fajr: "04:52", sunrise: "06:15", dhuhr: "12:27", ... }
+}
+```
+
+## Calculation Methods
+
+```typescript
+import { getMethod, getAllMethods } from '@misque/prayer-times';
+
+// Get a specific method
+const mwl = getMethod('MWL'); // Muslim World League
+const isna = getMethod('ISNA'); // Islamic Society of North America
+
+// See all available methods
+const methods = getAllMethods();
+```
+
+### Available Methods
+
+| Method | Description |
+|--------|-------------|
+| `MWL` | Muslim World League |
+| `ISNA` | Islamic Society of North America |
+| `Egypt` | Egyptian General Authority |
+| `Makkah` | Umm al-Qura, Makkah |
+| `Karachi` | University of Islamic Sciences, Karachi |
+| `Tehran` | Institute of Geophysics, Tehran |
+| `Jafari` | Shia Ithna Ashari |
+
+## Configuration
+
+```typescript
+import { calculatePrayerTimes, getMethod } from '@misque/prayer-times';
+
+const location = {
+  latitude: 51.5074,
+  longitude: -0.1278,
+  elevation: 11, // meters (optional)
+};
+
+const params = {
+  method: getMethod('MWL'),
+  asrMethod: 'Standard', // or 'Hanafi'
+  highLatitudeMethod: 'NightMiddle', // for high latitudes
+  adjustments: {
+    fajr: 2, // add 2 minutes to Fajr
+    isha: -3, // subtract 3 minutes from Isha
+  },
+};
+
+const result = calculatePrayerTimes(new Date(), location, params);
+```
+
+## Current Prayer
+
+```typescript
+import { getCurrentPrayer } from '@misque/prayer-times';
+
+const result = calculatePrayerTimes(new Date(), location, params);
+
+if (result.success) {
+  const current = getCurrentPrayer(result.data);
+  console.log(current.current); // "dhuhr"
+  console.log(current.next); // "asr"
+  console.log(current.timeUntilNext); // minutes until next prayer
+}
+```
+
+## Sunnah Times
+
+```typescript
+import { getSunnahTimes } from '@misque/prayer-times';
+
+const result = calculatePrayerTimes(new Date(), location, params);
+
+if (result.success) {
+  const sunnah = getSunnahTimes(result.data);
+  console.log(sunnah.lastThirdOfNight); // Date
+  console.log(sunnah.middleOfNight); // Date
+}
+```
+
+## High Latitude Methods
+
+For locations above 48 degrees latitude where twilight may persist:
+
+| Method | Description |
+|--------|-------------|
+| `NightMiddle` | Middle of the night |
+| `OneSeventh` | 1/7th of the night |
+| `AngleBased` | Angle-based calculation |
+| `None` | No adjustment |
+
+## Types
+
+```typescript
+import type {
+  PrayerTimes,
+  PrayerTimesFormatted,
+  CalculationParams,
+  PrayerLocation,
+  CalculationMethod,
+  CurrentPrayer,
+} from '@misque/prayer-times';
+```

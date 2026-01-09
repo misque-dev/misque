@@ -1,0 +1,56 @@
+---
+title: Introduction
+description: Open-source JavaScript libraries for Islamic applications.
+---
+
+# Misque
+
+Misque is a collection of open-source JavaScript/TypeScript libraries for building Islamic applications. Each package is designed to be modular, type-safe, and tree-shakable.
+
+## Packages
+
+| Package | Description |
+|---------|-------------|
+| [@misque/quran](/docs/packages/quran) | Quran text, translations, audio, and search APIs |
+| [@misque/prayer-times](/docs/packages/prayer-times) | Prayer time calculations for any location |
+| [@misque/hijri](/docs/packages/hijri) | Hijri calendar conversion and utilities |
+| [@misque/qibla](/docs/packages/qibla) | Qibla direction calculator |
+
+## Installation
+
+Install the packages you need:
+
+```bash
+pnpm add @misque/quran @misque/prayer-times @misque/hijri @misque/qibla
+```
+
+Or install individual packages:
+
+```bash
+pnpm add @misque/quran
+```
+
+## Quick Example
+
+```typescript
+import { createQuran } from '@misque/quran';
+import { calculatePrayerTimes, getDefaultParams } from '@misque/prayer-times';
+
+// Get Quran data
+const quran = createQuran();
+const fatiha = quran.getSurah(1);
+console.log(fatiha?.englishName); // "Al-Fatiha"
+
+// Calculate prayer times
+const location = { latitude: 21.4225, longitude: 39.8262 }; // Makkah
+const params = getDefaultParams();
+const result = calculatePrayerTimes(new Date(), location, params);
+if (result.success) {
+  console.log(result.data.fajr); // Date object for Fajr time
+}
+```
+
+## Requirements
+
+- Node.js 18+
+- TypeScript 5.0+ (recommended)

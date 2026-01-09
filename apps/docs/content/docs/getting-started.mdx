@@ -1,0 +1,137 @@
+---
+title: Getting Started
+description: Learn how to install and use Misque libraries.
+---
+
+# Getting Started
+
+This guide will help you get started with Misque libraries in your project.
+
+## Prerequisites
+
+- Node.js 18 or later
+- A package manager (pnpm, npm, or yarn)
+
+## Installation
+
+Install all packages:
+
+```bash
+pnpm add @misque/core @misque/quran @misque/prayer-times @misque/hijri @misque/qibla
+```
+
+Or install only what you need:
+
+```bash
+# Just Quran data
+pnpm add @misque/quran
+
+# Just prayer times
+pnpm add @misque/prayer-times
+```
+
+## TypeScript Setup
+
+All packages include TypeScript definitions. No additional `@types` packages needed.
+
+```json
+{
+  "compilerOptions": {
+    "moduleResolution": "bundler",
+    "esModuleInterop": true
+  }
+}
+```
+
+## Basic Usage
+
+### Quran
+
+```typescript
+import { createQuran, createQuranSession } from '@misque/quran';
+
+// Create a Quran instance
+const quran = createQuran();
+
+// Get all surahs
+const surahs = quran.getAllSurahs();
+
+// Get a specific surah
+const surah = quran.getSurah(1);
+
+// Search the Quran
+const results = quran.search('mercy');
+
+// Work with a specific reciter
+const session = createQuranSession('alzain');
+const playerData = session.getPlayerData(1);
+```
+
+### Prayer Times
+
+```typescript
+import {
+  calculatePrayerTimes,
+  getDefaultParams,
+  formatPrayerTimes,
+  getCurrentPrayer,
+} from '@misque/prayer-times';
+
+const location = {
+  latitude: 51.5074,
+  longitude: -0.1278,
+};
+
+const params = getDefaultParams();
+const result = calculatePrayerTimes(new Date(), location, params);
+
+if (result.success) {
+  const times = result.data;
+  const formatted = formatPrayerTimes(times);
+  console.log(formatted.fajr); // "05:30"
+
+  const current = getCurrentPrayer(times);
+  console.log(current.current); // "dhuhr"
+  console.log(current.next); // "asr"
+}
+```
+
+### Hijri Calendar
+
+```typescript
+import {
+  gregorianToHijri,
+  hijriToGregorian,
+  formatHijriDate,
+} from '@misque/hijri';
+
+// Convert Gregorian to Hijri
+const hijri = gregorianToHijri(new Date());
+console.log(hijri); // { year: 1446, month: 6, day: 15 }
+
+// Format Hijri date
+const formatted = formatHijriDate(hijri);
+console.log(formatted); // "15 Jumada al-Thani 1446"
+
+// Convert back to Gregorian
+const gregorian = hijriToGregorian(hijri);
+```
+
+### Qibla Direction
+
+```typescript
+import { calculateQiblaDirection, getCompassDirection } from '@misque/qibla';
+
+const location = { latitude: 51.5074, longitude: -0.1278 }; // London
+
+const direction = calculateQiblaDirection(location);
+console.log(direction); // 118.98 (degrees from North)
+
+const compass = getCompassDirection(direction);
+console.log(compass); // "ESE"
+```
+
+## Next Steps
+
+- Read the individual package documentation for detailed API references
+- Check out the examples in each package's documentation
