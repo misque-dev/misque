@@ -1,12 +1,11 @@
 import type { HijriDate, HijriMonthInfo } from './types';
 import { ISLAMIC_MONTHS, ISLAMIC_MONTHS_AR } from '@misque/core';
-import { getMonthLength, isHijriLeapYear } from './conversion';
+import { getMonthLength, isHijriLeapYear, toHijri } from './conversion';
 
 /**
  * Get today's Hijri date
  */
 export function getHijriToday(): HijriDate {
-  const { toHijri } = require('./conversion');
   const result = toHijri(new Date());
   if (result.success) {
     return result.data;
