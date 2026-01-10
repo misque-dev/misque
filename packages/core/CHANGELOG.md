@@ -1,5 +1,18 @@
 # @misque/core
 
+## 0.2.1
+
+### Patch Changes
+
+- Add comprehensive README documentation for all packages.
+
+  Each package now includes detailed documentation covering:
+  - Installation instructions
+  - Quick start examples with code snippets
+  - API reference overview
+  - TypeScript type information
+  - Links to full documentation site
+
 ## 0.2.0
 
 ### Minor Changes
