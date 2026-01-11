@@ -9,13 +9,32 @@ Complete Quran data access with support for text, translations, audio, and searc
 
 ## Installation
 
-```bash
+<Tabs items={['npm', 'pnpm', 'yarn', 'bun']}>
+  <Tab value="npm">
+```bash title="terminal"
+npm install @misque/quran
+```
+  </Tab>
+  <Tab value="pnpm">
+```bash title="terminal"
 pnpm add @misque/quran
 ```
+  </Tab>
+  <Tab value="yarn">
+```bash title="terminal"
+yarn add @misque/quran
+```
+  </Tab>
+  <Tab value="bun">
+```bash title="terminal"
+bun add @misque/quran
+```
+  </Tab>
+</Tabs>
 
 ## Quick Start
 
-```typescript
+```typescript title="quick-start.ts"
 import { createQuran } from '@misque/quran';
 
 const quran = createQuran();
@@ -26,8 +45,8 @@ console.log(`Total surahs: ${surahs.length}`); // 114
 
 // Get a specific surah
 const fatiha = quran.getSurah(1);
-console.log(fatiha?.englishName); // "Al-Fatiha"
-console.log(fatiha?.numberOfAyahs); // 7
+console.log(fatiha?.nameTransliterated); // "Al-Fatihah"
+console.log(fatiha?.numberOfAyahs);       // 7
 
 // Get a specific ayah
 const ayah = quran.getAyah(1, 1);
@@ -40,7 +59,7 @@ console.log(ayah?.text); // Arabic text of Bismillah
 
 Creates a Quran instance with all data loaded.
 
-```typescript
+```typescript title="create-quran.ts"
 const quran = createQuran();
 ```
 
@@ -48,7 +67,7 @@ const quran = createQuran();
 
 Creates a simplified session for working with a specific reciter.
 
-```typescript
+```typescript title="create-session.ts"
 const session = createQuranSession('alzain');
 
 // Get all surahs available for this reciter
@@ -62,14 +81,14 @@ const { audioUrl, fullText, surah } = session.getPlayerData(1);
 
 Creates a Quran instance with a preferred reciter pre-set.
 
-```typescript
+```typescript title="create-with-reciter.ts"
 const quran = createQuranWithReciter('alzain');
 const audioUrl = quran.getSurahAudioUrl(1);
 ```
 
 ## Searching
 
-```typescript
+```typescript title="search.ts"
 const results = quran.search('mercy', {
   language: 'en',
   limit: 10,
@@ -78,14 +97,14 @@ const results = quran.search('mercy', {
 });
 
 results.forEach((result) => {
-  console.log(`${result.surah.englishName}:${result.ayah.number}`);
+  console.log(`${result.surah.nameTransliterated}:${result.ayah.number}`);
   console.log(result.snippet);
 });
 ```
 
 ## Pagination
 
-```typescript
+```typescript title="pagination.ts"
 // Paginated surahs
 const page = quran.getSurahsPaginated({ page: 1, pageSize: 10 });
 console.log(page.items); // First 10 surahs
@@ -97,9 +116,9 @@ const searchPage = quran.searchPaginated('mercy', { page: 1, pageSize: 10 });
 
 ## Filtering
 
-```typescript
+```typescript title="filtering.ts"
 // Get only Meccan surahs
-const meccan = quran.getSurahs({ revelationType: 'Meccan' });
+const meccan = quran.getSurahs({ revelationType: 'meccan' });
 
 // Get surahs with more than 100 ayahs
 const long = quran.getSurahs({ minAyahs: 100 });
@@ -107,7 +126,7 @@ const long = quran.getSurahs({ minAyahs: 100 });
 
 ## Audio
 
-```typescript
+```typescript title="audio.ts"
 // Get audio URL for a specific ayah
 const url = quran.getAudioUrl('alzain', 1, 1);
 
@@ -117,7 +136,7 @@ const urls = quran.getSurahAudioUrls('alzain', 1);
 
 ## Types
 
-```typescript
+```typescript title="types.ts"
 import type {
   Surah,
   Ayah,

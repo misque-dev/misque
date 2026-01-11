@@ -5,115 +5,244 @@ description: Hijri (Islamic) calendar conversion and utilities.
 
 # @misque/hijri
 
-Convert between Gregorian and Hijri calendars with formatting support.
+Convert between Gregorian and Hijri (Islamic) calendars with formatting support. The Hijri calendar is a lunar calendar used by Muslims worldwide to determine religious dates and events.
+
+> **Note**: AH (Anno Hegirae) marks the Islamic calendar era, beginning with the Prophet Muhammad's migration from Makkah to Madinah in 622 CE. Actual Hijri dates may vary by 1-2 days depending on local moon sighting traditions.
 
 ## Installation
 
-```bash
+<Tabs items={['npm', 'pnpm', 'yarn', 'bun']}>
+  <Tab value="npm">
+```bash title="terminal"
+npm install @misque/hijri
+```
+  </Tab>
+  <Tab value="pnpm">
+```bash title="terminal"
 pnpm add @misque/hijri
 ```
+  </Tab>
+  <Tab value="yarn">
+```bash title="terminal"
+yarn add @misque/hijri
+```
+  </Tab>
+  <Tab value="bun">
+```bash title="terminal"
+bun add @misque/hijri
+```
+  </Tab>
+</Tabs>
 
 ## Quick Start
 
-```typescript
-import { gregorianToHijri, formatHijriDate } from '@misque/hijri';
+```typescript title="quick-start.ts"
+import { toHijri, formatHijri } from '@misque/hijri';
 
-const today = new Date();
-const hijri = gregorianToHijri(today);
-console.log(hijri); // { year: 1446, month: 6, day: 15 }
+const result = toHijri(new Date());
+if (result.success) {
+  console.log(result.data); // { year: 1446, month: 6, day: 15 }
 
-const formatted = formatHijriDate(hijri);
-console.log(formatted); // "15 Jumada al-Thani 1446"
+  const formatted = formatHijri(result.data);
+  console.log(formatted); // "15 Jumada al-Thani 1446"
+}
 ```
 
 ## Conversion
 
+All conversion functions return a `Result<T>` type for error handling.
+
 ### Gregorian to Hijri
 
-```typescript
-import { gregorianToHijri } from '@misque/hijri';
+```typescript title="gregorian-to-hijri.ts"
+import { toHijri, gregorianToHijri } from '@misque/hijri';
 
-const hijri = gregorianToHijri(new Date(2024, 0, 1));
-// { year: 1445, month: 6, day: 19 }
+// From Date object
+const result = toHijri(new Date(2024, 0, 1));
+if (result.success) {
+  console.log(result.data); // { year: 1445, month: 6, day: 19 }
+}
+
+// From year, month, day components
+const result2 = gregorianToHijri(2024, 1, 1);
+if (result2.success) {
+  console.log(result2.data); // { year: 1445, month: 6, day: 19 }
+}
 ```
 
 ### Hijri to Gregorian
 
-```typescript
-import { hijriToGregorian } from '@misque/hijri';
+```typescript title="hijri-to-gregorian.ts"
+import { toGregorian, hijriToGregorian } from '@misque/hijri';
 
-const gregorian = hijriToGregorian({ year: 1446, month: 1, day: 1 });
-// Date object
+// From HijriDate object
+const result = toGregorian({ year: 1446, month: 1, day: 1 });
+if (result.success) {
+  console.log(result.data); // Date object
+}
+
+// From year, month, day components
+const result2 = hijriToGregorian(1446, 1, 1);
+if (result2.success) {
+  console.log(result2.data); // { year: 2024, month: 7, day: 7 }
+}
+```
+
+### Full Conversion Result
+
+```typescript title="full-conversion.ts"
+import { convert } from '@misque/hijri';
+
+// Get both dates and Julian Day
+const result = convert(new Date());
+if (result.success) {
+  console.log(result.data.hijri);     // { year: 1446, month: 6, day: 15 }
+  console.log(result.data.gregorian); // { year: 2024, month: 12, day: 17 }
+  console.log(result.data.julianDay); // 2460661.5
+}
 ```
 
 ## Formatting
 
-```typescript
-import { formatHijriDate } from '@misque/hijri';
+```typescript title="formatting.ts"
+import { formatHijri, formatHijriArabic } from '@misque/hijri';
 
 const hijri = { year: 1446, month: 9, day: 1 };
 
-// Default format (English)
-formatHijriDate(hijri);
+// Default format (medium)
+formatHijri(hijri);
 // "1 Ramadan 1446"
 
 // Arabic month names
-formatHijriDate(hijri, { locale: 'ar' });
+formatHijri(hijri, { useArabic: true });
+// "1 رمضان 1446"
 
-// Custom format
-formatHijriDate(hijri, { format: 'short' });
+// Short format
+formatHijri(hijri, { style: 'short' });
 // "1/9/1446"
+
+// Long format with AH suffix
+formatHijri(hijri, { style: 'long' });
+// "1 Ramadan 1446 AH"
+
+// Full format with day of week
+formatHijri(hijri, { style: 'full', includeDayOfWeek: true });
+// "Friday, 1 Ramadan 1446 AH"
+
+// Quick Arabic formatting
+formatHijriArabic(hijri);
+// "1 رمضان 1446 AH"
+```
+
+## Date Information
+
+```typescript title="date-info.ts"
+import { getHijriDateInfo } from '@misque/hijri';
+
+const info = getHijriDateInfo({ year: 1446, month: 9, day: 1 });
+
+console.log(info.monthName);        // "Ramadan"
+console.log(info.monthNameArabic);  // "رمضان"
+console.log(info.dayOfWeekName);    // "Friday"
+console.log(info.isLeapYear);       // true or false
 ```
 
 ## Month Names
 
-```typescript
-import { getHijriMonthName, getHijriMonthNames } from '@misque/hijri';
+```typescript title="month-names.ts"
+import { getMonthName, getYearMonths } from '@misque/hijri';
 
 // Get a specific month name
-getHijriMonthName(9); // "Ramadan"
-getHijriMonthName(9, 'ar'); // "رمضان"
+getMonthName(9);        // "Ramadan"
+getMonthName(9, true);  // "رمضان" (Arabic)
 
-// Get all month names
-const months = getHijriMonthNames();
-// ["Muharram", "Safar", "Rabi al-Awwal", ...]
+// Get all months for a year
+const months = getYearMonths(1446);
+// [{ number: 1, name: "Muharram", nameArabic: "محرم", days: 30 }, ...]
 ```
 
 ## Utilities
 
-```typescript
+```typescript title="utilities.ts"
 import {
-  isLeapYear,
-  getDaysInMonth,
-  getDaysInYear,
+  isHijriLeapYear,
+  getMonthLength,
+  getYearLength,
+  getHijriToday,
 } from '@misque/hijri';
 
+// Get today's Hijri date
+const today = getHijriToday();
+console.log(`Today is ${today.day}/${today.month}/${today.year} AH`);
+
 // Check if Hijri year is a leap year
-isLeapYear(1446); // true or false
+isHijriLeapYear(1446); // true or false
 
 // Get days in a Hijri month
-getDaysInMonth(1446, 9); // 30 (Ramadan)
+getMonthLength(1446, 9); // 30 (Ramadan)
 
 // Get days in a Hijri year
-getDaysInYear(1446); // 354 or 355
+getYearLength(1446); // 354 or 355
 ```
 
-## Islamic Events
+## Date Manipulation
 
-```typescript
-import { getIslamicEvents } from '@misque/hijri';
+```typescript title="date-manipulation.ts"
+import { addDays, addMonths, addYears, compareDates, getDaysDifference } from '@misque/hijri';
 
-// Get events for a specific Hijri date
-const events = getIslamicEvents({ year: 1446, month: 9, day: 1 });
-// ["First day of Ramadan"]
+const date = { year: 1446, month: 9, day: 1 };
+
+// Add days
+addDays(date, 10);   // { year: 1446, month: 9, day: 11 }
+addDays(date, -5);   // { year: 1446, month: 8, day: 26 }
+
+// Add months
+addMonths(date, 3);  // { year: 1446, month: 12, day: 1 }
+
+// Add years
+addYears(date, 1);   // { year: 1447, month: 9, day: 1 }
+
+// Compare dates
+const date1 = { year: 1446, month: 9, day: 1 };
+const date2 = { year: 1446, month: 9, day: 15 };
+compareDates(date1, date2); // -1 (date1 < date2)
+
+// Get difference in days
+getDaysDifference(date1, date2); // 14
+```
+
+## Special Date Helpers
+
+```typescript title="special-dates.ts"
+import {
+  isRamadan,
+  isDhulHijjah,
+  getFirstDayOfMonth,
+  getLastDayOfMonth,
+} from '@misque/hijri';
+
+const date = { year: 1446, month: 9, day: 15 };
+
+// Check if in Ramadan (holy month of fasting)
+isRamadan(date); // true
+
+// Check if in Dhul Hijjah (pilgrimage month)
+isDhulHijjah(date); // false
+
+// Get first/last day of month
+getFirstDayOfMonth(1446, 9); // { year: 1446, month: 9, day: 1 }
+getLastDayOfMonth(1446, 9);  // { year: 1446, month: 9, day: 30 }
 ```
 
 ## Types
 
-```typescript
+```typescript title="types.ts"
 import type {
   HijriDate,
+  HijriDateInfo,
   HijriFormatOptions,
-  HijriLocale,
+  HijriMonthInfo,
+  GregorianDate,
+  ConversionResult,
 } from '@misque/hijri';
 ```

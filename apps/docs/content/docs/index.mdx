@@ -1,6 +1,7 @@
 ---
 title: Introduction
 description: Open-source JavaScript libraries for Islamic applications.
+icon: Info
 ---
 
 # Misque
@@ -20,29 +21,71 @@ Misque is a collection of open-source JavaScript/TypeScript libraries for buildi
 
 Install the packages you need:
 
-```bash
+<Tabs items={['npm', 'pnpm', 'yarn', 'bun']}>
+  <Tab value="npm">
+```bash title="terminal"
+npm install @misque/quran @misque/prayer-times @misque/hijri @misque/qibla
+```
+  </Tab>
+  <Tab value="pnpm">
+```bash title="terminal"
 pnpm add @misque/quran @misque/prayer-times @misque/hijri @misque/qibla
 ```
+  </Tab>
+  <Tab value="yarn">
+```bash title="terminal"
+yarn add @misque/quran @misque/prayer-times @misque/hijri @misque/qibla
+```
+  </Tab>
+  <Tab value="bun">
+```bash title="terminal"
+bun add @misque/quran @misque/prayer-times @misque/hijri @misque/qibla
+```
+  </Tab>
+</Tabs>
 
 Or install individual packages:
 
-```bash
+<Tabs items={['npm', 'pnpm', 'yarn', 'bun']}>
+  <Tab value="npm">
+```bash title="terminal"
+npm install @misque/quran
+```
+  </Tab>
+  <Tab value="pnpm">
+```bash title="terminal"
 pnpm add @misque/quran
 ```
+  </Tab>
+  <Tab value="yarn">
+```bash title="terminal"
+yarn add @misque/quran
+```
+  </Tab>
+  <Tab value="bun">
+```bash title="terminal"
+bun add @misque/quran
+```
+  </Tab>
+</Tabs>
 
 ## Quick Example
 
-```typescript
+```typescript title="example.ts"
 import { createQuran } from '@misque/quran';
 import { calculatePrayerTimes, getDefaultParams } from '@misque/prayer-times';
 
 // Get Quran data
 const quran = createQuran();
 const fatiha = quran.getSurah(1);
-console.log(fatiha?.englishName); // "Al-Fatiha"
+console.log(fatiha?.nameTransliterated); // "Al-Fatihah"
 
 // Calculate prayer times
-const location = { latitude: 21.4225, longitude: 39.8262 }; // Makkah
+const location = {
+  latitude: 21.4225,
+  longitude: 39.8262,
+  timezone: 'Asia/Riyadh', // Makkah
+};
 const params = getDefaultParams();
 const result = calculatePrayerTimes(new Date(), location, params);
 if (result.success) {

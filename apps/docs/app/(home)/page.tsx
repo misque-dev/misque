@@ -1,15 +1,21 @@
-import { Hero } from '@/components/home/hero';
-import { Features } from '@/components/home/features';
-import { PackagesGrid } from '@/components/home/packages-grid';
-import { CTA } from '@/components/home/cta';
+import { HomePage } from '@/modules/home';
 
-export default function HomePage() {
-  return (
-    <>
-      <Hero />
-      <Features />
-      <PackagesGrid />
-      <CTA />
-    </>
-  );
+async function getGitHubStars() {
+  try {
+    const response = await fetch(
+      'https://api.github.com/repos/asadkomi/misque',
+      { next: { revalidate: 3600 } }
+    );
+    if (!response.ok) return null;
+    const json = await response.json();
+    return parseInt(json.stargazers_count).toLocaleString();
+  } catch {
+    return null;
+  }
+}
+
+export default async function Page() {
+  const stars = await getGitHubStars();
+
+  return <HomePage stars={stars} />;
 }

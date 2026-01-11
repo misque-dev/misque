@@ -1,6 +1,7 @@
 ---
 title: Getting Started
 description: Learn how to install and use Misque libraries.
+icon: Rocket
 ---
 
 # Getting Started
@@ -16,25 +17,75 @@ This guide will help you get started with Misque libraries in your project.
 
 Install all packages:
 
-```bash
+<Tabs items={['npm', 'pnpm', 'yarn', 'bun']}>
+  <Tab value="npm">
+```bash title="terminal"
+npm install @misque/core @misque/quran @misque/prayer-times @misque/hijri @misque/qibla
+```
+  </Tab>
+  <Tab value="pnpm">
+```bash title="terminal"
 pnpm add @misque/core @misque/quran @misque/prayer-times @misque/hijri @misque/qibla
 ```
+  </Tab>
+  <Tab value="yarn">
+```bash title="terminal"
+yarn add @misque/core @misque/quran @misque/prayer-times @misque/hijri @misque/qibla
+```
+  </Tab>
+  <Tab value="bun">
+```bash title="terminal"
+bun add @misque/core @misque/quran @misque/prayer-times @misque/hijri @misque/qibla
+```
+  </Tab>
+</Tabs>
 
 Or install only what you need:
 
-```bash
+<Tabs items={['npm', 'pnpm', 'yarn', 'bun']}>
+  <Tab value="npm">
+```bash title="terminal"
+# Just Quran data
+npm install @misque/quran
+
+# Just prayer times
+npm install @misque/prayer-times
+```
+  </Tab>
+  <Tab value="pnpm">
+```bash title="terminal"
 # Just Quran data
 pnpm add @misque/quran
 
 # Just prayer times
 pnpm add @misque/prayer-times
 ```
+  </Tab>
+  <Tab value="yarn">
+```bash title="terminal"
+# Just Quran data
+yarn add @misque/quran
+
+# Just prayer times
+yarn add @misque/prayer-times
+```
+  </Tab>
+  <Tab value="bun">
+```bash title="terminal"
+# Just Quran data
+bun add @misque/quran
+
+# Just prayer times
+bun add @misque/prayer-times
+```
+  </Tab>
+</Tabs>
 
 ## TypeScript Setup
 
 All packages include TypeScript definitions. No additional `@types` packages needed.
 
-```json
+```json title="tsconfig.json"
 {
   "compilerOptions": {
     "moduleResolution": "bundler",
@@ -47,7 +98,7 @@ All packages include TypeScript definitions. No additional `@types` packages nee
 
 ### Quran
 
-```typescript
+```typescript title="quran-example.ts"
 import { createQuran, createQuranSession } from '@misque/quran';
 
 // Create a Quran instance
@@ -58,6 +109,7 @@ const surahs = quran.getAllSurahs();
 
 // Get a specific surah
 const surah = quran.getSurah(1);
+console.log(surah?.nameTransliterated); // "Al-Fatihah"
 
 // Search the Quran
 const results = quran.search('mercy');
@@ -69,7 +121,7 @@ const playerData = session.getPlayerData(1);
 
 ### Prayer Times
 
-```typescript
+```typescript title="prayer-times-example.ts"
 import {
   calculatePrayerTimes,
   getDefaultParams,
@@ -80,6 +132,7 @@ import {
 const location = {
   latitude: 51.5074,
   longitude: -0.1278,
+  timezone: 'Europe/London',
 };
 
 const params = getDefaultParams();
@@ -92,43 +145,67 @@ if (result.success) {
 
   const current = getCurrentPrayer(times);
   console.log(current.current); // "dhuhr"
-  console.log(current.next); // "asr"
+  console.log(current.next);    // "asr"
 }
 ```
 
 ### Hijri Calendar
 
-```typescript
-import {
-  gregorianToHijri,
-  hijriToGregorian,
-  formatHijriDate,
-} from '@misque/hijri';
+```typescript title="hijri-example.ts"
+import { toHijri, toGregorian, formatHijri } from '@misque/hijri';
 
 // Convert Gregorian to Hijri
-const hijri = gregorianToHijri(new Date());
-console.log(hijri); // { year: 1446, month: 6, day: 15 }
+const result = toHijri(new Date());
+if (result.success) {
+  console.log(result.data); // { year: 1446, month: 6, day: 15 }
 
-// Format Hijri date
-const formatted = formatHijriDate(hijri);
-console.log(formatted); // "15 Jumada al-Thani 1446"
+  // Format Hijri date
+  const formatted = formatHijri(result.data);
+  console.log(formatted); // "15 Jumada al-Thani 1446"
 
-// Convert back to Gregorian
-const gregorian = hijriToGregorian(hijri);
+  // Convert back to Gregorian
+  const gregorianResult = toGregorian(result.data);
+  if (gregorianResult.success) {
+    console.log(gregorianResult.data); // Date object
+  }
+}
 ```
 
 ### Qibla Direction
 
-```typescript
-import { calculateQiblaDirection, getCompassDirection } from '@misque/qibla';
+```typescript title="qibla-example.ts"
+import { calculateQibla, bearingToCompassDirection } from '@misque/qibla';
 
 const location = { latitude: 51.5074, longitude: -0.1278 }; // London
 
-const direction = calculateQiblaDirection(location);
-console.log(direction); // 118.98 (degrees from North)
+const result = calculateQibla(location);
+if (result.success) {
+  console.log(result.data.bearing);          // 118.98 (degrees from North)
+  console.log(result.data.distance);         // 4585.2 (km)
+  console.log(result.data.compassDirection); // "ESE"
 
-const compass = getCompassDirection(direction);
-console.log(compass); // "ESE"
+  // Or convert any bearing manually
+  const compass = bearingToCompassDirection(118.98);
+  console.log(compass); // "ESE"
+}
+```
+
+## Error Handling
+
+All Misque packages use a `Result<T>` type for error handling. This provides type-safe error handling without exceptions:
+
+```typescript title="error-handling.ts"
+import { calculateQibla } from '@misque/qibla';
+
+const result = calculateQibla({ latitude: 999, longitude: 999 }); // Invalid coordinates
+
+if (result.success) {
+  // TypeScript knows result.data is available
+  console.log(result.data.bearing);
+} else {
+  // TypeScript knows result.error is available
+  console.error(result.error.message);
+}
 ```
 
 ## Next Steps

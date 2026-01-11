@@ -7,6 +7,14 @@ import {
 } from 'fumadocs-ui/page';
 import { notFound } from 'next/navigation';
 import defaultMdxComponents from 'fumadocs-ui/mdx';
+import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
+
+// Combine fumadocs MDX components with custom components
+const mdxComponents: any = {
+  ...defaultMdxComponents,
+  Tabs,
+  Tab,
+};
 
 export default async function Page(props: {
   params: Promise<{ slug?: string[] }>;
@@ -22,7 +30,7 @@ export default async function Page(props: {
       <DocsTitle>{page.data.title}</DocsTitle>
       <DocsDescription>{page.data.description}</DocsDescription>
       <DocsBody>
-        <MDX components={defaultMdxComponents as any} />
+        <MDX components={mdxComponents} />
       </DocsBody>
     </DocsPage>
   );

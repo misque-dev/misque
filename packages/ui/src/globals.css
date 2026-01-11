@@ -1,0 +1,669 @@
+@import 'tailwindcss';
+
+/* Source directories for Tailwind class scanning (monorepo paths) */
+@source "../../../apps/docs/components/**/*.tsx";
+@source "../../../apps/docs/modules/**/*.tsx";
+@source "../../../apps/docs/app/**/*.tsx";
+@source "../src/components/**/*.tsx";
+
+@plugin "tailwindcss-animate";
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.147 0.004 49.25);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.147 0.004 49.25);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.147 0.004 49.25);
+  --primary: oklch(0.216 0.006 56.043);
+  --primary-foreground: oklch(0.985 0.001 106.423);
+  --secondary: oklch(0.97 0.001 106.424);
+  --secondary-foreground: oklch(0.216 0.006 56.043);
+  --muted: oklch(0.97 0.001 106.424);
+  --muted-foreground: oklch(0.553 0.013 58.071);
+  --accent: oklch(0.97 0.001 106.424);
+  --accent-foreground: oklch(0.216 0.006 56.043);
+  --destructive: oklch(0.577 0.245 27.325);
+  --destructive-foreground: oklch(0.577 0.245 27.325);
+  --border: oklch(0.923 0.003 48.717);
+  --input: oklch(0.923 0.003 48.717);
+  --ring: oklch(0.709 0.01 56.259);
+  --chart-1: oklch(0.646 0.222 41.116);
+  --chart-2: oklch(0.6 0.118 184.704);
+  --chart-3: oklch(0.398 0.07 227.392);
+  --chart-4: oklch(0.828 0.189 84.429);
+  --chart-5: oklch(0.769 0.188 70.08);
+  --sidebar: oklch(0.985 0.001 106.423);
+  --sidebar-foreground: oklch(0.147 0.004 49.25);
+  --sidebar-primary: oklch(0.216 0.006 56.043);
+  --sidebar-primary-foreground: oklch(0.985 0.001 106.423);
+  --sidebar-accent: oklch(0.97 0.001 106.424);
+  --sidebar-accent-foreground: oklch(0.216 0.006 56.043);
+  --sidebar-border: oklch(0.923 0.003 48.717);
+  --sidebar-ring: oklch(0.709 0.01 56.259);
+  --radius: 0.5rem;
+  --scrollbar-thumb: oklch(0.7 0 0);
+  --scrollbar-track: oklch(0.95 0 0);
+  --scrollbar-thumb-hover: oklch(0.5 0 0);
+}
+
+.dark {
+  --background: oklch(0.147 0.004 49.25);
+  --foreground: oklch(0.985 0.001 106.423);
+  --card: oklch(0.147 0.004 49.25);
+  --card-foreground: oklch(0.985 0.001 106.423);
+  --popover: oklch(0.147 0.004 49.25);
+  --popover-foreground: oklch(0.985 0.001 106.423);
+  --primary: oklch(0.985 0.001 106.423);
+  --primary-foreground: oklch(0.216 0.006 56.043);
+  --secondary: oklch(0.268 0.007 34.298);
+  --secondary-foreground: oklch(0.985 0.001 106.423);
+  --muted: oklch(0.268 0.007 34.298);
+  --muted-foreground: oklch(0.709 0.01 56.259);
+  --accent: oklch(0.268 0.007 34.298);
+  --accent-foreground: oklch(0.985 0.001 106.423);
+  --destructive: oklch(0.396 0.141 25.723);
+  --destructive-foreground: oklch(0.637 0.237 25.331);
+  --border: oklch(0.268 0.007 34.298);
+  --input: oklch(0.268 0.007 34.298);
+  --ring: oklch(0.553 0.013 58.071);
+  --chart-1: oklch(0.488 0.243 264.376);
+  --chart-2: oklch(0.696 0.17 162.48);
+  --chart-3: oklch(0.769 0.188 70.08);
+  --chart-4: oklch(0.627 0.265 303.9);
+  --chart-5: oklch(0.645 0.246 16.439);
+  --sidebar: oklch(0.216 0.006 56.043);
+  --sidebar-foreground: oklch(0.985 0.001 106.423);
+  --sidebar-primary: oklch(0.488 0.243 264.376);
+  --sidebar-primary-foreground: oklch(0.985 0.001 106.423);
+  --sidebar-accent: oklch(0.268 0.007 34.298);
+  --sidebar-accent-foreground: oklch(0.985 0.001 106.423);
+  --sidebar-border: oklch(0.268 0.007 34.298);
+  --sidebar-ring: oklch(0.553 0.013 58.071);
+  --scrollbar-thumb: oklch(0.4 0 0);
+  --scrollbar-track: oklch(0.15 0 0);
+  --scrollbar-thumb-hover: oklch(0.55 0 0);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+
+  --animate-accordion-down: accordion-down 0.2s ease-out;
+  --animate-accordion-up: accordion-up 0.2s ease-out;
+
+  @keyframes accordion-down {
+    from {
+      height: 0;
+    }
+    to {
+      height: var(--radix-accordion-content-height);
+    }
+  }
+
+  @keyframes accordion-up {
+    from {
+      height: var(--radix-accordion-content-height);
+    }
+    to {
+      height: 0;
+    }
+  }
+  @keyframes accordion-down {
+    from {
+      height: 0;
+    }
+    to {
+      height: var(--radix-accordion-content-height);
+    }
+  }
+
+  @keyframes accordion-up {
+    from {
+      height: var(--radix-accordion-content-height);
+    }
+    to {
+      height: 0;
+    }
+  }
+
+  @keyframes hrtl-scroll {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(calc(-95%));
+    }
+  }
+
+  @keyframes hrtl-scroll-reverse {
+    from {
+      transform: translateX(calc(-95%));
+    }
+    to {
+      transform: translateX(0);
+    }
+  }
+
+  --animate-ripple: ripple 3s ease-in-out infinite;
+
+  @keyframes ripple {
+    0% {
+      transform: translate(-50%, -50%) scale(0.8);
+      opacity: 1;
+    }
+    50% {
+      transform: translate(-50%, -50%) scale(1);
+      opacity: 0.6;
+    }
+    100% {
+      transform: translate(-50%, -50%) scale(0.8);
+      opacity: 1;
+    }
+  }
+
+  @keyframes scroll {
+    to {
+      transform: translate(calc(-50% - 0.5rem));
+    }
+  }
+
+  @keyframes spotlight {
+    0% {
+      opacity: 0;
+      transform: translate(-72%, -62%) scale(0.5);
+    }
+    100% {
+      opacity: 1;
+      transform: translate(-50%, -40%) scale(1);
+    }
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+html {
+  scroll-behavior: auto;
+  scroll-padding-top: calc(
+    var(--fd-nav-height, 56px) + var(--fd-banner-height, 0px) +
+      var(--fd-tocnav-height, 0px) + 24px
+  );
+}
+
+html:not([data-anchor-scrolling]) {
+  scroll-behavior: smooth;
+}
+
+/* Global, accessible custom scrollbars */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+}
+
+/* WebKit-based browsers */
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+::-webkit-scrollbar-track {
+  background: var(--scrollbar-track);
+}
+::-webkit-scrollbar-thumb {
+  background-color: var(--scrollbar-thumb);
+  border-radius: 9999px;
+  border: 3px solid transparent;
+  background-clip: content-box;
+}
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--scrollbar-thumb-hover);
+}
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+@utility no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@utility bg-grid {
+  background-image:
+    linear-gradient(currentColor 1px, transparent 1px),
+    linear-gradient(90deg, currentColor 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+@utility bg-grid-small {
+  background-image:
+    linear-gradient(currentColor 1px, transparent 1px),
+    linear-gradient(90deg, currentColor 1px, transparent 1px);
+  background-size: 8px 8px;
+}
+
+@utility bg-dot {
+  background-image: radial-gradient(
+    circle at 50% 50%,
+    currentColor 1.6px,
+    transparent 1.6px
+  );
+  background-size: 16px 16px;
+}
+
+.markdown-content {
+  @apply text-sm leading-relaxed;
+}
+
+.markdown-content pre {
+  @apply max-w-full overflow-x-auto;
+}
+
+.markdown-content pre code {
+  @apply whitespace-pre-wrap break-words;
+}
+
+.markdown-content h1,
+.markdown-content h2,
+.markdown-content h3,
+.markdown-content h4,
+.markdown-content h5,
+.markdown-content h6 {
+  @apply font-semibold text-foreground;
+}
+
+.markdown-content p {
+  @apply mb-2 last:mb-0;
+}
+
+.markdown-content ul,
+.markdown-content ol {
+  @apply space-y-2 list-disc;
+}
+
+.markdown-content li {
+  @apply text-sm;
+}
+
+.markdown-content code {
+  @apply bg-muted px-1.5 py-0.5 rounded text-xs font-mono;
+}
+
+.markdown-content pre {
+  @apply overflow-x-auto;
+}
+
+.markdown-content blockquote {
+  @apply border-l-4 border-muted-foreground/20 pl-4 my-2 italic;
+}
+
+.markdown-content table {
+  @apply w-full border-collapse;
+}
+
+.markdown-content th,
+.markdown-content td {
+  @apply border border-border px-2 py-1 text-xs;
+}
+
+.markdown-content th {
+  @apply bg-muted font-medium;
+}
+
+@keyframes stream-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.streaming-cursor {
+  animation: stream-pulse 1s ease-in-out infinite;
+}
+
+code:not(pre code) {
+  @apply break-words;
+}
+
+/* ============================================
+   Fumadocs Customization - Match better-auth
+   ============================================ */
+
+/* Docs layout - ensure navbar doesn't overlap */
+#nd-docs-layout {
+  margin-top: 48px !important;
+}
+
+/* Sidebar styling - transparent background with border */
+aside.bg-fd-card,
+[data-fd-sidebar] aside.bg-fd-card,
+[data-collapsed] aside.bg-fd-card,
+.bg-fd-card[data-collapsed],
+aside[data-collapsed].bg-fd-card {
+  background: transparent !important;
+  background-color: transparent !important;
+  --color-fd-card: transparent !important;
+}
+
+[data-fd-sidebar] {
+  --color-fd-card: transparent !important;
+  background: transparent !important;
+}
+
+[data-fd-sidebar] aside,
+[data-fd-sidebar] > div {
+  background: transparent !important;
+  background-color: transparent !important;
+}
+
+/* Keep only the right border */
+[data-fd-sidebar] aside {
+  border-right: 1px solid var(--border) !important;
+  border-left: none !important;
+  border-top: none !important;
+  border-bottom: none !important;
+  border-inline-end: 1px solid var(--border) !important;
+}
+
+/* Remove sidebar internal scroll - scroll with page */
+[data-fd-sidebar] [data-radix-scroll-area-viewport] {
+  overflow: visible !important;
+  height: auto !important;
+  max-height: none !important;
+}
+
+[data-fd-sidebar] [data-radix-scroll-area-root] {
+  overflow: visible !important;
+  height: auto !important;
+}
+
+/* Hide the default fumadocs logo/title in sidebar */
+[data-fd-sidebar] > div:first-child > div:first-child > a:first-child {
+  display: none !important;
+}
+
+/* Sidebar search button styling */
+[data-fd-sidebar] button[data-search] {
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 0.5rem;
+}
+
+/* Sidebar links styling */
+[data-fd-sidebar] a {
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  border-radius: 0.25rem;
+  transition:
+    background-color 0.15s,
+    color 0.15s;
+}
+
+[data-fd-sidebar] a:hover {
+  background-color: var(--muted);
+}
+
+[data-fd-sidebar] a[data-active='true'] {
+  background-color: var(--muted);
+  color: var(--foreground);
+}
+
+/* Sidebar folder styling */
+[data-fd-sidebar] [data-fd-collapsible] {
+  border-bottom: 1px solid var(--border);
+}
+
+[data-fd-sidebar] [data-fd-collapsible] > button {
+  padding: 0.625rem 1rem;
+  font-size: 0.875rem;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Better-auth style border utility */
+.border-lines {
+  border-color: var(--muted);
+}
+
+/* Content area max-width */
+article {
+  max-width: 860px;
+}
+
+/* ==============================================
+   Code Block Styling - Fumadocs UI Style
+   ============================================== */
+
+/* Base code block container (figure element) */
+figure[data-rehype-pretty-code-figure],
+figure:has(pre) {
+  /* margin: 1rem 0; */
+  /* border-radius: 0.5rem; */
+  /* border: 1px solid var(--border); */
+  overflow: hidden;
+  background: transparent;
+}
+
+.dark figure[data-rehype-pretty-code-figure],
+.dark figure:has(pre) {
+  background: transparent;
+  border-color: transparent;
+}
+
+/* Title bar (figcaption or first div) - shows filename */
+figure[data-rehype-pretty-code-figure] > figcaption,
+figure:has(pre) > div:first-child:not(pre) {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1rem;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--muted-foreground);
+  background: var(--muted);
+  border-bottom: 1px solid var(--border);
+}
+
+.dark figure[data-rehype-pretty-code-figure] > figcaption,
+.dark figure:has(pre) > div:first-child:not(pre) {
+  background: oklch(0.12 0.01 0);
+  border-bottom-color: oklch(0.22 0.01 0);
+}
+
+/* Pre element styling */
+figure[data-rehype-pretty-code-figure] pre,
+figure:has(pre) pre {
+  margin: 0;
+  /* padding: 1rem; */
+  background: transparent !important;
+  border: none;
+  overflow-x: auto;
+  font-size: 0.875rem;
+  line-height: 1.7;
+}
+
+/* ==============================================
+   Terminal / Bash Code Block Styling  
+   ============================================== */
+
+/* Terminal-style code blocks (bash, shell, terminal) */
+figure[data-rehype-pretty-code-figure]:has(pre[data-language='bash']),
+figure[data-rehype-pretty-code-figure]:has(pre[data-language='sh']),
+figure[data-rehype-pretty-code-figure]:has(pre[data-language='shell']),
+figure[data-rehype-pretty-code-figure]:has(pre[data-language='terminal']) {
+  background: #ffffff !important;
+  border-color: var(--muted);
+}
+
+.dark figure[data-rehype-pretty-code-figure]:has(pre[data-language='bash']),
+.dark figure[data-rehype-pretty-code-figure]:has(pre[data-language='sh']),
+.dark figure[data-rehype-pretty-code-figure]:has(pre[data-language='shell']),
+.dark
+  figure[data-rehype-pretty-code-figure]:has(pre[data-language='terminal']) {
+  background: #000000 !important;
+  border-color: var(--muted);
+}
+
+/* Terminal title bar */
+figure[data-rehype-pretty-code-figure]:has(pre[data-language='bash'])
+  > figcaption,
+figure[data-rehype-pretty-code-figure]:has(pre[data-language='sh'])
+  > figcaption,
+figure[data-rehype-pretty-code-figure]:has(pre[data-language='shell'])
+  > figcaption,
+figure[data-rehype-pretty-code-figure]:has(pre[data-language='terminal'])
+  > figcaption {
+  background: oklch(0.15 0.01 260);
+  border-bottom-color: oklch(0.22 0.01 260);
+  color: oklch(0.7 0.01 0);
+}
+
+/* Terminal code text color */
+figure[data-rehype-pretty-code-figure]:has(pre[data-language='bash']) pre code,
+figure[data-rehype-pretty-code-figure]:has(pre[data-language='sh']) pre code,
+figure[data-rehype-pretty-code-figure]:has(pre[data-language='shell']) pre code,
+figure[data-rehype-pretty-code-figure]:has(pre[data-language='terminal'])
+  pre
+  code {
+  color: oklch(0.85 0.01 0);
+}
+
+/* Table styling */
+table {
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+table th {
+  background: var(--muted);
+}
+
+table tbody {
+  background: transparent !important;
+}
+
+table tbody tr {
+  background: transparent !important;
+}
+
+table tbody tr:hover {
+  background: transparent !important;
+}
+
+table tbody tr:nth-child(even) {
+  background: transparent !important;
+}
+
+/* Feature cards grid styling (for MDX content) */
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+}
+
+.feature-grid > div {
+  border: 1px solid var(--border);
+  padding: 1.5rem;
+}
+
+@media (max-width: 768px) {
+  .feature-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Header anchor link styling */
+h1 a,
+h2 a,
+h3 a,
+h4 a,
+h5 a,
+h6 a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* TOC styling - right side (large screens) */
+#nd-toc {
+  padding-top: 4rem !important;
+}
+
+/* TOC popover - top of content (smaller screens) - make it sticky */
+[class*='[grid-area:toc-popover]'] {
+  position: sticky !important;
+  top: 48px !important;
+  z-index: 20;
+}
+
+/* Hide right-side TOC on smaller screens to prevent overflow */
+@media (max-width: 1279px) {
+  #nd-toc {
+    display: none !important;
+  }
+}
+
+/* Next page navigation */
+a[data-fd-card] {
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+  padding: 1rem;
+  transition: background-color 0.15s;
+}
+
+a[data-fd-card]:hover {
+  background-color: var(--muted);
+}
+
+[data-tabs] {
+  /* Container styling */
+  background: transparent !important;
+}
