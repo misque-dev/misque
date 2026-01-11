@@ -1,6 +1,7 @@
 {
   "name": "@misque/ui",
   "version": "0.0.2",
+  "private": true,
   "description": "Shared UI components built with shadcn/ui for Misque applications",
   "keywords": [
     "ui",
@@ -116,8 +117,5 @@
   },
   "engines": {
     "node": ">=18.0.0"
-  },
-  "publishConfig": {
-    "access": "public"
   }
 }
