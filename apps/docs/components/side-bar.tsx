@@ -8,8 +8,7 @@ import { Suspense, useEffect, useState } from "react";
 import { AsideLink } from "@/components/ui/aside-link";
 import { cn } from "@/lib/utils";
 import { contents, examples } from "./sidebar-content";
-import { Badge } from "./ui/badge";
-import { Select, SelectContent, SelectItem, SelectTrigger } from "./ui/select";
+import { Badge, Select, SelectContent, SelectItem, SelectTrigger } from "@misque/ui";
 
 export default function ArticleLayout() {
 	const [currentOpen, setCurrentOpen] = useState<number>(0);

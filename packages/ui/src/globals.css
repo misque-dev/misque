@@ -1,17 +1,46 @@
+/* ==============================================
+   @misque/ui - Global Styles
+
+   Single source of truth for all Misque styles.
+   Used by both UI package components and docs site.
+
+   Sections:
+   1. Imports & Directives
+   2. Theme Variables
+   3. @theme Configuration
+   4. Base Layer Styles
+   5. Scroll Behavior & Scrollbars
+   6. Utility Classes
+   7. Markdown Content Styling
+   8. Fumadocs Layout & Sidebar Overrides
+   9. Fumadocs TOC Overrides
+   10. Code Block Styling
+   11. Table Styling
+   12. Feature Grid
+   13. Package Sidebar Icons
+   ============================================== */
+
+/* ==============================================
+   1. IMPORTS & DIRECTIVES
+   ============================================== */
 @import 'tailwindcss';
 
-/* Source directories for Tailwind class scanning (monorepo paths) */
-@source "../../../apps/docs/components/**/*.tsx";
-@source "../../../apps/docs/modules/**/*.tsx";
-@source "../../../apps/docs/app/**/*.tsx";
 @source "../src/components/**/*.tsx";
 
 @plugin "tailwindcss-animate";
 
 @custom-variant dark (&:is(.dark *));
 
+/* ==============================================
+   2. THEME VARIABLES
+   ============================================== */
 :root {
-  --background: oklch(1 0 0);
+  /* Pure white background for docs */
+  --background: #ffffff;
+  --fd-background: #ffffff;
+  --sidebar-bg: transparent;
+
+  /* Core colors */
   --foreground: oklch(0.147 0.004 49.25);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.147 0.004 49.25);
@@ -30,11 +59,15 @@
   --border: oklch(0.923 0.003 48.717);
   --input: oklch(0.923 0.003 48.717);
   --ring: oklch(0.709 0.01 56.259);
+
+  /* Chart colors */
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
   --chart-3: oklch(0.398 0.07 227.392);
   --chart-4: oklch(0.828 0.189 84.429);
   --chart-5: oklch(0.769 0.188 70.08);
+
+  /* Sidebar colors */
   --sidebar: oklch(0.985 0.001 106.423);
   --sidebar-foreground: oklch(0.147 0.004 49.25);
   --sidebar-primary: oklch(0.216 0.006 56.043);
@@ -43,6 +76,8 @@
   --sidebar-accent-foreground: oklch(0.216 0.006 56.043);
   --sidebar-border: oklch(0.923 0.003 48.717);
   --sidebar-ring: oklch(0.709 0.01 56.259);
+
+  /* Misc */
   --radius: 0.5rem;
   --scrollbar-thumb: oklch(0.7 0 0);
   --scrollbar-track: oklch(0.95 0 0);
@@ -50,7 +85,11 @@
 }
 
 .dark {
-  --background: oklch(0.147 0.004 49.25);
+  /* Pure black background for docs */
+  --background: #000000;
+  --fd-background: #000000;
+
+  /* Core colors */
   --foreground: oklch(0.985 0.001 106.423);
   --card: oklch(0.147 0.004 49.25);
   --card-foreground: oklch(0.985 0.001 106.423);
@@ -69,11 +108,15 @@
   --border: oklch(0.268 0.007 34.298);
   --input: oklch(0.268 0.007 34.298);
   --ring: oklch(0.553 0.013 58.071);
+
+  /* Chart colors */
   --chart-1: oklch(0.488 0.243 264.376);
   --chart-2: oklch(0.696 0.17 162.48);
   --chart-3: oklch(0.769 0.188 70.08);
   --chart-4: oklch(0.627 0.265 303.9);
   --chart-5: oklch(0.645 0.246 16.439);
+
+  /* Sidebar colors */
   --sidebar: oklch(0.216 0.006 56.043);
   --sidebar-foreground: oklch(0.985 0.001 106.423);
   --sidebar-primary: oklch(0.488 0.243 264.376);
@@ -82,11 +125,16 @@
   --sidebar-accent-foreground: oklch(0.985 0.001 106.423);
   --sidebar-border: oklch(0.268 0.007 34.298);
   --sidebar-ring: oklch(0.553 0.013 58.071);
+
+  /* Misc */
   --scrollbar-thumb: oklch(0.4 0 0);
   --scrollbar-track: oklch(0.15 0 0);
   --scrollbar-thumb-hover: oklch(0.55 0 0);
 }
 
+/* ==============================================
+   3. @theme CONFIGURATION
+   ============================================== */
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -128,23 +176,6 @@
   --animate-accordion-down: accordion-down 0.2s ease-out;
   --animate-accordion-up: accordion-up 0.2s ease-out;
 
-  @keyframes accordion-down {
-    from {
-      height: 0;
-    }
-    to {
-      height: var(--radix-accordion-content-height);
-    }
-  }
-
-  @keyframes accordion-up {
-    from {
-      height: var(--radix-accordion-content-height);
-    }
-    to {
-      height: 0;
-    }
-  }
   @keyframes accordion-down {
     from {
       height: 0;
@@ -216,6 +247,9 @@
   }
 }
 
+/* ==============================================
+   4. BASE LAYER STYLES
+   ============================================== */
 @layer base {
   * {
     @apply border-border outline-ring/50;
@@ -225,6 +259,9 @@
   }
 }
 
+/* ==============================================
+   5. SCROLL BEHAVIOR & SCROLLBARS
+   ============================================== */
 html {
   scroll-behavior: auto;
   scroll-padding-top: calc(
@@ -237,7 +274,7 @@ html:not([data-anchor-scrolling]) {
   scroll-behavior: smooth;
 }
 
-/* Global, accessible custom scrollbars */
+/* Global custom scrollbars */
 * {
   scrollbar-width: thin;
   scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
@@ -264,6 +301,9 @@ html:not([data-anchor-scrolling]) {
   background: transparent;
 }
 
+/* ==============================================
+   6. UTILITY CLASSES
+   ============================================== */
 @utility no-scrollbar {
   -ms-overflow-style: none;
   scrollbar-width: none;
@@ -295,6 +335,14 @@ html:not([data-anchor-scrolling]) {
   background-size: 16px 16px;
 }
 
+/* Better-auth style border utility */
+.border-lines {
+  border-color: var(--muted);
+}
+
+/* ==============================================
+   7. MARKDOWN CONTENT STYLING
+   ============================================== */
 .markdown-content {
   @apply text-sm leading-relaxed;
 }
@@ -372,23 +420,29 @@ code:not(pre code) {
   @apply break-words;
 }
 
-/* ============================================
-   Fumadocs Customization - Match better-auth
-   ============================================ */
+/* ==============================================
+   8. FUMADOCS LAYOUT & SIDEBAR OVERRIDES
+   ============================================== */
 
 /* Docs layout - ensure navbar doesn't overlap */
 #nd-docs-layout {
   margin-top: 48px !important;
 }
 
-/* Sidebar styling - transparent background with border */
+/* Force transparent background on sidebar */
+.bg-fd-card {
+  --tw-bg-opacity: 0 !important;
+}
+
 aside.bg-fd-card,
+[data-collapsed].bg-fd-card,
+[data-fd-sidebar] .bg-fd-card,
 [data-fd-sidebar] aside.bg-fd-card,
 [data-collapsed] aside.bg-fd-card,
 .bg-fd-card[data-collapsed],
 aside[data-collapsed].bg-fd-card {
-  background: transparent !important;
   background-color: transparent !important;
+  background: transparent !important;
   --color-fd-card: transparent !important;
 }
 
@@ -410,6 +464,40 @@ aside[data-collapsed].bg-fd-card {
   border-top: none !important;
   border-bottom: none !important;
   border-inline-end: 1px solid var(--border) !important;
+}
+
+/* Collapsed sidebar state */
+aside[data-collapsed] {
+  background-color: oklch(0.98 0 0) !important;
+  border-right: 1px solid var(--border) !important;
+}
+
+.dark aside[data-collapsed] {
+  background-color: oklch(0.1 0 0) !important;
+}
+
+/* Fixed sidebar positioning below navbar */
+[grid-area='sidebar'],
+.\[grid-area\:sidebar\] {
+  position: fixed !important;
+  top: 30px !important;
+  left: 0 !important;
+  height: calc(100vh - 20px) !important;
+  z-index: 30 !important;
+}
+
+[grid-area='sidebar'] > aside,
+.\[grid-area\:sidebar\] > aside {
+  height: 100% !important;
+  position: relative !important;
+  top: 0 !important;
+}
+
+/* Hide sidebar collapse triggers */
+button[aria-label='Collapse Sidebar'],
+button:has(> svg[data-lucide='panel-left-close']),
+button:has(> svg[data-lucide='panel-left-open']) {
+  display: none !important;
 }
 
 /* Remove sidebar internal scroll - scroll with page */
@@ -468,61 +556,141 @@ aside[data-collapsed].bg-fd-card {
   gap: 0.5rem;
 }
 
-/* Better-auth style border utility */
-.border-lines {
-  border-color: var(--muted);
-}
-
 /* Content area max-width */
 article {
   max-width: 860px;
 }
 
 /* ==============================================
-   Code Block Styling - Fumadocs UI Style
+   9. FUMADOCS TOC OVERRIDES
    ============================================== */
 
-/* Base code block container (figure element) */
+/* TOC styling - right side (large screens) */
+#nd-toc {
+  padding-top: 4rem !important;
+}
+
+/* TOC popover - match navbar styling */
+[class*='grid-area:toc-popover'],
+[class*='[grid-area:toc-popover]'] {
+  position: sticky !important;
+  top: 48px !important;
+  z-index: 20;
+  background: color-mix(
+    in oklch,
+    var(--background) 75%,
+    transparent
+  ) !important;
+  backdrop-filter: blur(4px) !important;
+  -webkit-backdrop-filter: blur(4px) !important;
+  border-bottom: 1px solid var(--border) !important;
+}
+
+/* Hide right-side TOC on smaller screens to prevent overflow */
+@media (max-width: 1279px) {
+  #nd-toc {
+    display: none !important;
+  }
+}
+
+/* ==============================================
+   10. CODE BLOCK STYLING
+   ============================================== */
+
+/* Base code block container */
 figure[data-rehype-pretty-code-figure],
-figure:has(pre) {
-  /* margin: 1rem 0; */
-  /* border-radius: 0.5rem; */
-  /* border: 1px solid var(--border); */
+figure.bg-fd-card,
+article figure {
+  margin: 1rem 0;
+  border-radius: 0.5rem;
+  border: 1px solid var(--border);
   overflow: hidden;
-  background: transparent;
+  background: #ffffff !important;
+  background-color: #ffffff !important;
 }
 
 .dark figure[data-rehype-pretty-code-figure],
-.dark figure:has(pre) {
-  background: transparent;
-  border-color: transparent;
+.dark figure.bg-fd-card,
+.dark article figure {
+  border-color: var(--border);
+  background: #000000 !important;
+  background-color: #000000 !important;
 }
 
-/* Title bar (figcaption or first div) - shows filename */
+/* Code content area - force white/black background (not the header) */
+figure[data-rehype-pretty-code-figure] pre,
+figure:has(pre) pre,
+article pre,
+.prose pre {
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+}
+
+figure[data-rehype-pretty-code-figure] pre code,
+figure:has(pre) pre code,
+article pre code,
+.prose pre code {
+  background: transparent !important;
+  background-color: transparent !important;
+}
+
+/* Dark mode - code content area black */
+.dark figure[data-rehype-pretty-code-figure] pre,
+.dark figure:has(pre) pre,
+.dark article pre,
+.dark .prose pre {
+  background: #000000 !important;
+  background-color: #000000 !important;
+}
+
+.dark figure[data-rehype-pretty-code-figure] pre code,
+.dark figure:has(pre) pre code,
+.dark article pre code,
+.dark .prose pre code {
+  background: transparent !important;
+  background-color: transparent !important;
+}
+
+/* Dark mode code block borders - comprehensive selectors */
+.dark [data-rehype-pretty-code-figure],
+.dark figure:has(pre),
+.dark div:has(> figure[data-rehype-pretty-code-figure]),
+.dark article figure,
+.dark .prose figure {
+  border-color: var(--border) !important;
+}
+
+/* Title bar (figcaption or first div) - shows filename, keep muted */
 figure[data-rehype-pretty-code-figure] > figcaption,
-figure:has(pre) > div:first-child:not(pre) {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.625rem 1rem;
-  font-size: 0.8125rem;
-  font-weight: 500;
-  color: var(--muted-foreground);
-  background: var(--muted);
-  border-bottom: 1px solid var(--border);
+figure.bg-fd-card > div:first-child,
+article figure > div:first-child:not([role='region']) {
+  background: var(--muted) !important;
+  background-color: var(--muted) !important;
 }
 
 .dark figure[data-rehype-pretty-code-figure] > figcaption,
-.dark figure:has(pre) > div:first-child:not(pre) {
-  background: oklch(0.12 0.01 0);
-  border-bottom-color: oklch(0.22 0.01 0);
+.dark figure.bg-fd-card > div:first-child,
+.dark article figure > div:first-child:not([role='region']) {
+  background: oklch(0.12 0.01 0) !important;
+  background-color: oklch(0.12 0.01 0) !important;
+}
+
+/* File icon for title bar */
+figure[data-rehype-pretty-code-figure] > figcaption::before {
+  content: '';
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2371717a' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z'/%3E%3Cpath d='M14 2v4a2 2 0 0 0 2 2h4'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: center;
+  flex-shrink: 0;
 }
 
 /* Pre element styling */
-figure[data-rehype-pretty-code-figure] pre,
-figure:has(pre) pre {
+figure[data-rehype-pretty-code-figure] pre {
   margin: 0;
-  /* padding: 1rem; */
+  padding: 1rem;
   background: transparent !important;
   border: none;
   overflow-x: auto;
@@ -530,17 +698,66 @@ figure:has(pre) pre {
   line-height: 1.7;
 }
 
-/* ==============================================
-   Terminal / Bash Code Block Styling  
-   ============================================== */
+/* Code element */
+figure[data-rehype-pretty-code-figure] pre > code {
+  display: grid;
+  counter-reset: line;
+  font-family: var(
+    --font-mono,
+    ui-monospace,
+    SFMono-Regular,
+    'SF Mono',
+    Menlo,
+    Monaco,
+    'Liberation Mono',
+    'Courier New',
+    monospace
+  );
+}
 
-/* Terminal-style code blocks (bash, shell, terminal) */
+/* Code lines */
+figure[data-rehype-pretty-code-figure] pre > code > [data-line] {
+  padding: 0 0.5rem;
+  border-left: 2px solid transparent;
+}
+
+/* Highlighted lines */
+figure[data-rehype-pretty-code-figure] pre > code > [data-highlighted-line] {
+  background: oklch(0.95 0.01 220);
+  border-left-color: oklch(0.55 0.2 220);
+}
+
+.dark
+  figure[data-rehype-pretty-code-figure]
+  pre
+  > code
+  > [data-highlighted-line] {
+  background: oklch(0.2 0.02 220);
+  border-left-color: oklch(0.6 0.2 220);
+}
+
+/* Line numbers */
+figure[data-rehype-pretty-code-figure]
+  pre
+  > code[data-line-numbers]
+  > [data-line]::before {
+  counter-increment: line;
+  content: counter(line);
+  display: inline-block;
+  width: 1.5rem;
+  margin-right: 1rem;
+  text-align: right;
+  color: var(--muted-foreground);
+  opacity: 0.5;
+}
+
+/* --- Terminal/Bash Code Blocks --- */
 figure[data-rehype-pretty-code-figure]:has(pre[data-language='bash']),
 figure[data-rehype-pretty-code-figure]:has(pre[data-language='sh']),
 figure[data-rehype-pretty-code-figure]:has(pre[data-language='shell']),
 figure[data-rehype-pretty-code-figure]:has(pre[data-language='terminal']) {
-  background: #ffffff !important;
-  border-color: var(--muted);
+  background: oklch(0.13 0.01 260) !important;
+  border-color: oklch(0.22 0.01 260);
 }
 
 .dark figure[data-rehype-pretty-code-figure]:has(pre[data-language='bash']),
@@ -548,8 +765,8 @@ figure[data-rehype-pretty-code-figure]:has(pre[data-language='terminal']) {
 .dark figure[data-rehype-pretty-code-figure]:has(pre[data-language='shell']),
 .dark
   figure[data-rehype-pretty-code-figure]:has(pre[data-language='terminal']) {
-  background: #000000 !important;
-  border-color: var(--muted);
+  background: oklch(0.1 0.01 260) !important;
+  border-color: oklch(0.18 0.01 260);
 }
 
 /* Terminal title bar */
@@ -566,6 +783,18 @@ figure[data-rehype-pretty-code-figure]:has(pre[data-language='terminal'])
   color: oklch(0.7 0.01 0);
 }
 
+/* Terminal icon */
+figure[data-rehype-pretty-code-figure]:has(pre[data-language='bash'])
+  > figcaption::before,
+figure[data-rehype-pretty-code-figure]:has(pre[data-language='sh'])
+  > figcaption::before,
+figure[data-rehype-pretty-code-figure]:has(pre[data-language='shell'])
+  > figcaption::before,
+figure[data-rehype-pretty-code-figure]:has(pre[data-language='terminal'])
+  > figcaption::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23a1a1aa' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='4 17 10 11 4 5'/%3E%3Cline x1='12' x2='20' y1='19' y2='19'/%3E%3C/svg%3E");
+}
+
 /* Terminal code text color */
 figure[data-rehype-pretty-code-figure]:has(pre[data-language='bash']) pre code,
 figure[data-rehype-pretty-code-figure]:has(pre[data-language='sh']) pre code,
@@ -576,7 +805,162 @@ figure[data-rehype-pretty-code-figure]:has(pre[data-language='terminal'])
   color: oklch(0.85 0.01 0);
 }
 
-/* Table styling */
+/* Copy button styling */
+figure[data-rehype-pretty-code-figure] button[data-copy] {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  padding: 0.375rem;
+  border-radius: 0.375rem;
+  background: transparent;
+  border: none;
+  color: var(--muted-foreground);
+  cursor: pointer;
+  opacity: 0;
+  transition:
+    opacity 0.2s,
+    background-color 0.2s;
+}
+
+figure[data-rehype-pretty-code-figure]:hover button[data-copy] {
+  opacity: 1;
+}
+
+figure[data-rehype-pretty-code-figure] button[data-copy]:hover {
+  background: var(--muted);
+}
+
+/* --- Inline Code --- */
+:not(pre) > code {
+  padding: 0.125rem 0.375rem;
+  border-radius: 0.25rem;
+  background: var(--muted);
+  font-size: 0.875em;
+  font-family: var(
+    --font-mono,
+    ui-monospace,
+    SFMono-Regular,
+    'SF Mono',
+    Menlo,
+    Monaco,
+    'Liberation Mono',
+    'Courier New',
+    monospace
+  );
+  color: var(--foreground);
+  border: 1px solid var(--border);
+}
+
+.dark :not(pre) > code {
+  background: oklch(0.18 0.01 0);
+  border-color: oklch(0.25 0.01 0);
+}
+
+/* --- Fumadocs CodeBlock component --- */
+[data-codeblock] {
+  border-radius: 0.5rem;
+  border: 1px solid var(--border);
+  overflow: hidden;
+  background: #ffffff !important;
+}
+
+[data-codeblock] > div:first-child {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1rem;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  background: var(--muted);
+  border-bottom: 1px solid var(--border);
+}
+
+.dark [data-codeblock] {
+  background: #000000 !important;
+  border-color: var(--border);
+}
+
+.dark [data-codeblock] > div:first-child {
+  background: oklch(0.12 0.01 0);
+  border-bottom-color: var(--border);
+}
+
+/* --- Package Install Tabs --- */
+[role='tabpanel'] {
+  padding: 0 !important;
+}
+
+[role='tabpanel'] figure,
+[role='tabpanel'] > figure {
+  margin: 0 !important;
+  border-radius: 0 !important;
+  border-left: none !important;
+  border-right: none !important;
+  border-bottom: none !important;
+}
+
+[role='tabpanel'] [role='region'],
+[role='tabpanel'] > div > div:last-child,
+[role='tabpanel'] pre,
+[role='tabpanel'] pre > code,
+[role='tabpanel'] .bg-fd-secondary:not(:has([role='tablist'])) {
+  background-color: #ffffff !important;
+}
+
+.dark [role='tabpanel'] [role='region'],
+.dark [role='tabpanel'] > div > div:last-child,
+.dark [role='tabpanel'] pre,
+.dark [role='tabpanel'] pre > code,
+.dark [role='tabpanel'] .bg-fd-secondary:not(:has([role='tablist'])) {
+  background-color: #000000 !important;
+}
+
+[data-tabs] {
+  background: transparent !important;
+}
+
+/* --- Remove shadows from code blocks --- */
+figure[data-rehype-pretty-code-figure],
+[role='tabpanel'] > div,
+.prose pre,
+pre,
+[data-codeblock],
+.fd-codeblock,
+[class*='codeblock'],
+article > div:has(pre),
+article > div:has([data-codeblock]),
+.prose > div:has(pre),
+article div,
+.prose div {
+  box-shadow: none !important;
+}
+
+/* Remove all shadows in article content */
+article *,
+.prose * {
+  --tw-shadow: 0 0 #0000 !important;
+  --tw-shadow-colored: 0 0 #0000 !important;
+  box-shadow: none !important;
+}
+
+/* Override Tailwind shadow classes in docs content */
+article .shadow-sm,
+article .shadow-md,
+article .shadow-lg,
+article .shadow-xl,
+article .shadow-2xl,
+.prose .shadow-sm,
+.prose .shadow-md,
+.prose .shadow-lg,
+.prose .shadow-xl,
+.prose .shadow-2xl {
+  --tw-shadow: 0 0 #0000 !important;
+  box-shadow: none !important;
+}
+
+/* ==============================================
+   11. TABLE STYLING
+   ============================================== */
 table {
   border: 1px solid var(--border);
   border-radius: 0.5rem;
@@ -587,12 +971,29 @@ table th {
   background: var(--muted);
 }
 
-table tbody {
-  background: transparent !important;
+table thead,
+table thead tr,
+table thead th {
+  background: var(--muted) !important;
+  background-color: var(--muted) !important;
+}
+.dark table thead,
+.dark table thead tr,
+.dark table thead th {
+  background: oklch(0.12 0.01 0) !important;
+  background-color: oklch(0.12 0.01 0) !important;
 }
 
-table tbody tr {
-  background: transparent !important;
+table tbody,
+table tbody tr,
+table tbody td {
+  background-color: #ffffff !important;
+}
+
+.dark table tbody,
+.dark table tbody tr,
+.dark table tbody td {
+  background-color: #000000 !important;
 }
 
 table tbody tr:hover {
@@ -603,7 +1004,9 @@ table tbody tr:nth-child(even) {
   background: transparent !important;
 }
 
-/* Feature cards grid styling (for MDX content) */
+/* ==============================================
+   12. FEATURE GRID
+   ============================================== */
 .feature-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -621,6 +1024,91 @@ table tbody tr:nth-child(even) {
   }
 }
 
+/* ==============================================
+   13. PACKAGE SIDEBAR ICONS
+   ============================================== */
+
+/* Hide default chevron icons */
+svg[data-icon],
+[data-icon='true'],
+aside svg[data-icon],
+aside [data-icon='true'],
+aside svg.ms-auto,
+aside .ms-auto svg {
+  display: none !important;
+}
+
+/* Package link base styling */
+aside a[href*='/packages/'] {
+  display: flex !important;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* BookOpen icon for @misque/quran */
+aside a[href*='/packages/quran']::before {
+  content: '';
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+  flex-shrink: 0;
+  background-color: currentColor;
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z'%3E%3C/path%3E%3Cpath d='M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z'%3E%3C/path%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z'%3E%3C/path%3E%3Cpath d='M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z'%3E%3C/path%3E%3C/svg%3E");
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+}
+
+/* Clock icon for @misque/prayer-times */
+aside a[href*='/packages/prayer-times']::before {
+  content: '';
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+  flex-shrink: 0;
+  background-color: currentColor;
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'%3E%3C/circle%3E%3Cpolyline points='12 6 12 12 16 14'%3E%3C/polyline%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'%3E%3C/circle%3E%3Cpolyline points='12 6 12 12 16 14'%3E%3C/polyline%3E%3C/svg%3E");
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+}
+
+/* Calendar icon for @misque/hijri */
+aside a[href*='/packages/hijri']::before {
+  content: '';
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+  flex-shrink: 0;
+  background-color: currentColor;
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='4' width='18' height='18' rx='2' ry='2'%3E%3C/rect%3E%3Cline x1='16' y1='2' x2='16' y2='6'%3E%3C/line%3E%3Cline x1='8' y1='2' x2='8' y2='6'%3E%3C/line%3E%3Cline x1='3' y1='10' x2='21' y2='10'%3E%3C/line%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='4' width='18' height='18' rx='2' ry='2'%3E%3C/rect%3E%3Cline x1='16' y1='2' x2='16' y2='6'%3E%3C/line%3E%3Cline x1='8' y1='2' x2='8' y2='6'%3E%3C/line%3E%3Cline x1='3' y1='10' x2='21' y2='10'%3E%3C/line%3E%3C/svg%3E");
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+}
+
+/* Compass icon for @misque/qibla */
+aside a[href*='/packages/qibla']::before {
+  content: '';
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+  flex-shrink: 0;
+  background-color: currentColor;
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'%3E%3C/circle%3E%3Cpolygon points='16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76'%3E%3C/polygon%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'%3E%3C/circle%3E%3Cpolygon points='16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76'%3E%3C/polygon%3E%3C/svg%3E");
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+}
+
 /* Header anchor link styling */
 h1 a,
 h2 a,
@@ -630,25 +1118,6 @@ h5 a,
 h6 a {
   color: inherit;
   text-decoration: none;
-}
-
-/* TOC styling - right side (large screens) */
-#nd-toc {
-  padding-top: 4rem !important;
-}
-
-/* TOC popover - top of content (smaller screens) - make it sticky */
-[class*='[grid-area:toc-popover]'] {
-  position: sticky !important;
-  top: 48px !important;
-  z-index: 20;
-}
-
-/* Hide right-side TOC on smaller screens to prevent overflow */
-@media (max-width: 1279px) {
-  #nd-toc {
-    display: none !important;
-  }
 }
 
 /* Next page navigation */
@@ -661,9 +1130,4 @@ a[data-fd-card] {
 
 a[data-fd-card]:hover {
   background-color: var(--muted);
-}
-
-[data-tabs] {
-  /* Container styling */
-  background: transparent !important;
 }

@@ -1,6 +1,8 @@
 # Claude Code
 /.claude
 .mcp.json
+.playwright-mcp
+CLAUDE.md
 
 # Dependencies
 node_modules
