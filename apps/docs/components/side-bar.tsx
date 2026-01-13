@@ -126,9 +126,6 @@ export default function ArticleLayout() {
 																		className="break-words text-nowrap w-[--fd-sidebar-width] [&>div>div]:hover:!bg-fd-muted"
 																		activeClassName="[&>div>div]:!bg-fd-muted"
 																	>
-																		<div className="min-w-4">
-																			<listItem.icon className="text-stone-950 dark:text-white size-4" />
-																		</div>
 																		{listItem.title}
 																		{listItem.isNew && <NewBadge />}
 																	</AsideLink>

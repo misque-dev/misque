@@ -1,20 +1,13 @@
 import {
-  BookOpen,
-  Clock,
-  Compass,
-  Calendar,
   Rocket,
   Box,
-  FileText,
   Code,
-  MapPin,
   type LucideIcon,
 } from 'lucide-react';
 
 type SidebarItem = {
   title: string;
   href: string;
-  icon: LucideIcon;
   isNew?: boolean;
   group?: boolean;
 };
@@ -34,12 +27,10 @@ export const contents: SidebarSection[] = [
       {
         title: 'Introduction',
         href: '/docs',
-        icon: FileText,
       },
       {
         title: 'Getting Started',
         href: '/docs/getting-started',
-        icon: Rocket,
       },
     ],
   },
@@ -50,27 +41,27 @@ export const contents: SidebarSection[] = [
       {
         title: 'Quran',
         href: '/docs/packages/quran',
-        icon: BookOpen,
       },
       {
         title: 'Prayer Times',
         href: '/docs/packages/prayer-times',
-        icon: Clock,
       },
       {
         title: 'Qibla',
         href: '/docs/packages/qibla',
-        icon: Compass,
       },
       {
         title: 'Hijri',
         href: '/docs/packages/hijri',
-        icon: Calendar,
       },
       {
         title: 'Mosques Finder',
         href: '/docs/packages/mosques-finder',
-        icon: MapPin,
+        isNew: true,
+      },
+      {
+        title: 'Zakat',
+        href: '/docs/packages/zakat',
         isNew: true,
       },
     ],
@@ -85,7 +76,6 @@ export const examples: SidebarSection[] = [
       {
         title: 'Basic Usage',
         href: '/docs/examples/basic-usage',
-        icon: Code,
       },
     ],
   },
