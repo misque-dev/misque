@@ -1,0 +1,72 @@
+{
+  "name": "@misque/mosques-finder",
+  "version": "0.1.0",
+  "description": "Find nearby mosques using OpenStreetMap data",
+  "keywords": [
+    "mosque",
+    "masjid",
+    "islamic",
+    "muslim",
+    "openstreetmap",
+    "osm",
+    "geolocation",
+    "places"
+  ],
+  "license": "MIT",
+  "author": "Misque Contributors",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/misque/misque.git",
+    "directory": "packages/mosques-finder"
+  },
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    }
+  },
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "sideEffects": false,
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "lint": "eslint src/",
+    "lint:fix": "eslint src/ --fix",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "typecheck": "tsc --noEmit",
+    "clean": "rm -rf dist coverage .turbo"
+  },
+  "dependencies": {
+    "@misque/core": "workspace:*"
+  },
+  "devDependencies": {
+    "@misque/typescript-config": "workspace:*",
+    "@misque/vitest-config": "workspace:*",
+    "@vitest/coverage-v8": "^4.0.0",
+    "msw": "^2.7.0",
+    "tsup": "^8.3.0",
+    "typescript": "^5.7.0",
+    "vitest": "^4.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
