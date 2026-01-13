@@ -26,7 +26,7 @@ export interface GitHubLinkProps extends VariantProps<
 
 export const GitHubLink = ({
   variant = 'desktop',
-  href = 'https://github.com/asadkomi/misque',
+  href = 'https://github.com/misque-dev/misque',
   className,
 }: GitHubLinkProps) => {
   return (

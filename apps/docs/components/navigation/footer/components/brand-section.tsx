@@ -12,7 +12,7 @@ export const BrandSection = () => {
       </p>
       <div className="mt-6 flex items-center gap-3">
         <Link
-          href="https://github.com/asadkomi/misque"
+          href="https://github.com/misque-dev/misque"
           target="_blank"
           rel="noopener noreferrer"
           className="p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors"

@@ -23,7 +23,7 @@ export const Npm = () => {
         >
           <NpmIcon />
         </Link>
-        <Link href="https://github.com/asadkomi/misque" target="_blank">
+        <Link href="https://github.com/misque-dev/misque" target="_blank">
           <GitHubIcon />
         </Link>
       </div>

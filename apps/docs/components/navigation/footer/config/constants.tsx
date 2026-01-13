@@ -15,13 +15,13 @@ export const footerLinks = {
   links: [
     {
       label: 'GitHub',
-      href: 'https://github.com/asadkomi/misque',
+      href: 'https://github.com/misque-dev/misque',
       external: true,
     },
     { label: 'npm', href: 'https://www.npmjs.com/org/misque', external: true },
     {
       label: 'Discussions',
-      href: 'https://github.com/asadkomi/misque/discussions',
+      href: 'https://github.com/misque-dev/misque/discussions',
       external: true,
     },
   ],
