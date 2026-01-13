@@ -1,50 +1,65 @@
 "use client";
 
-import Link from "next/link";
-import ReactMarkdown from "react-markdown";
 import {
 	IconLink,
 	BookIcon,
 	GitHubIcon,
 	XIcon,
 } from "./changelog-layout";
-
-interface Release {
-	id: number;
-	tag_name: string;
-	name: string;
-	body: string;
-	published_at: string;
-	html_url: string;
-	author: {
-		login: string;
-		avatar_url: string;
-	};
-}
+import type { ChangelogRelease, PackageUpdate } from "./changelog-data";
 
 interface DefaultChangelogProps {
-	releases: Release[];
+	releases: ChangelogRelease[];
 }
 
-function formatDate(dateString: string) {
-	const date = new Date(dateString);
-	return date.toLocaleDateString("en-US", {
-		year: "numeric",
-		month: "long",
-		day: "numeric",
-	});
+function getTypeColor(type: PackageUpdate['type']) {
+	switch (type) {
+		case 'major':
+			return 'bg-red-500/10 text-red-500 border-red-500/20';
+		case 'minor':
+			return 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20';
+		case 'patch':
+			return 'bg-blue-500/10 text-blue-500 border-blue-500/20';
+	}
+}
+
+function PackageCard({ pkg }: { pkg: PackageUpdate }) {
+	return (
+		<div className="border border-border rounded-sm p-4 space-y-3">
+			<div className="flex items-center justify-between gap-4">
+				<div className="flex items-center gap-2">
+					<code className="text-sm font-mono font-medium text-foreground">
+						{pkg.name}
+					</code>
+					<span className="text-xs text-muted-foreground">
+						v{pkg.version}
+					</span>
+				</div>
+				<span className={`text-xs px-2 py-0.5 rounded border ${getTypeColor(pkg.type)}`}>
+					{pkg.type}
+				</span>
+			</div>
+			<ul className="space-y-1.5">
+				{pkg.changes.map((change, idx) => (
+					<li key={idx} className="text-sm text-muted-foreground flex items-start gap-2">
+						<span className="text-muted-foreground/50 mt-1.5 w-1 h-1 rounded-full bg-current flex-shrink-0" />
+						{change}
+					</li>
+				))}
+			</ul>
+		</div>
+	);
 }
 
 export function DefaultChangelog({ releases }: DefaultChangelogProps) {
 	return (
-		<div className="relative grid grid-cols-1 lg:grid-cols-[300px_1fr] gap-8 lg:gap-16">
+		<div className="relative grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-8 lg:gap-12">
 			{/* Left sidebar - sticky */}
 			<div className="lg:sticky lg:top-24 lg:h-fit">
 				<div className="space-y-6">
 					<h1 className="text-2xl font-bold tracking-tight">Changelogs</h1>
 					<p className="text-sm text-muted-foreground leading-relaxed">
-						All of the changes made to Misque will be available here. Stay up
-						to date with the latest features, improvements, and bug fixes.
+						All of the changes made to Misque packages. Stay up to date with the latest features, improvements, and bug fixes.
 					</p>
 
 					<div className="pt-4 space-y-3">
@@ -54,7 +69,7 @@ export function DefaultChangelog({ releases }: DefaultChangelogProps) {
 							label="Documentation"
 						/>
 						<IconLink
-							href="https://github.com/asadkomi/misque"
+							href="https://github.com/misque-dev/misque"
 							icon={<GitHubIcon className="w-4 h-4" />}
 							label="GitHub"
 							external
@@ -107,97 +122,20 @@ export function DefaultChangelog({ releases }: DefaultChangelogProps) {
 						>
 							{/* Version header */}
 							<div className="flex items-center gap-4 mb-6">
-								<Link
-									href={release.html_url}
-									target="_blank"
-									className="text-xl font-semibold hover:text-primary transition-colors"
-								>
-									{release.tag_name}
-								</Link>
+								<h2 className="text-xl font-semibold text-foreground">
+									{release.version}
+								</h2>
 								<time className="text-sm text-muted-foreground">
-									{formatDate(release.published_at)}
+									{release.date}
 								</time>
 							</div>
 
-							{/* Release name if different from tag */}
-							{release.name && release.name !== release.tag_name && (
-								<h2 className="text-lg font-medium mb-4">{release.name}</h2>
-							)}
-
-							{/* Release body */}
-							<div className="prose prose-sm dark:prose-invert max-w-none">
-								<ReactMarkdown
-									components={{
-										h1: ({ children }) => (
-											<h1 className="text-xl font-bold mt-6 mb-4">
-												{children}
-											</h1>
-										),
-										h2: ({ children }) => (
-											<h2 className="text-lg font-semibold mt-5 mb-3">
-												{children}
-											</h2>
-										),
-										h3: ({ children }) => (
-											<h3 className="text-base font-medium mt-4 mb-2">
-												{children}
-											</h3>
-										),
-										p: ({ children }) => (
-											<p className="text-muted-foreground mb-3">{children}</p>
-										),
-										ul: ({ children }) => (
-											<ul className="list-disc list-inside space-y-1 text-muted-foreground mb-4">
-												{children}
-											</ul>
-										),
-										li: ({ children }) => <li>{children}</li>,
-										a: ({ href, children }) => (
-											<a
-												href={href}
-												target="_blank"
-												rel="noopener noreferrer"
-												className="text-primary hover:underline"
-											>
-												{children}
-											</a>
-										),
-										code: ({ children }) => (
-											<code className="px-1.5 py-0.5 rounded bg-muted text-sm font-mono">
-												{children}
-											</code>
-										),
-										pre: ({ children }) => (
-											<pre className="p-4 rounded-lg bg-muted overflow-x-auto mb-4">
-												{children}
-											</pre>
-										),
-									}}
-								>
-									{release.body || "No release notes available."}
-								</ReactMarkdown>
+							{/* Package updates */}
+							<div className="space-y-4">
+								{release.packages.map((pkg) => (
+									<PackageCard key={`${release.id}-${pkg.name}`} pkg={pkg} />
+								))}
 							</div>
-
-							{/* Author */}
-							{release.author && (
-								<div className="flex items-center gap-2 mt-6 pt-4 border-t border-border/50">
-									<img
-										src={release.author.avatar_url}
-										alt={release.author.login}
-										className="w-6 h-6 rounded-full"
-									/>
-									<span className="text-sm text-muted-foreground">
-										Released by{" "}
-										<Link
-											href={`https://github.com/${release.author.login}`}
-											target="_blank"
-											className="text-foreground hover:text-primary transition-colors"
-										>
-											@{release.author.login}
-										</Link>
-									</span>
-								</div>
-							)}
 						</article>
 					))
 				)}

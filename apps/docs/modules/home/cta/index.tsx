@@ -30,7 +30,7 @@ export const CTASection = ({ stars }: Props) => {
               Get Started
             </Link>
             <Link
-              href="https://github.com/asadkomi/misque"
+              href="https://github.com/misque-dev/misque"
               target="_blank"
               className="inline-flex items-center justify-center px-6 py-2.5 text-sm font-medium text-zinc-900 dark:text-zinc-100 border border-border hover:bg-muted/50 transition-colors gap-2"
             >

@@ -1,7 +1,5 @@
 import { Header } from './_components/header';
 import { Stats } from './_components/stats';
-import { Navbar } from '@/components/navigation/navbar';
-import { Footer } from '@/components/navigation/footer';
 
 async function getNpmDownloads() {
   try {
@@ -11,6 +9,8 @@ async function getNpmDownloads() {
       '@misque/qibla',
       '@misque/hijri',
       '@misque/core',
+      '@misque/mosques-finder',
+      '@misque/zakat',
     ];
 
     const downloads = await Promise.all(
@@ -34,12 +34,12 @@ async function getNpmDownloads() {
 async function getGitHubStars() {
   try {
     const response = await fetch(
-      'https://api.github.com/repos/asadkomi/misque',
+      'https://api.github.com/repos/misque-dev/misque',
       { next: { revalidate: 3600 } }
     );
     if (!response.ok) return null;
     const data = await response.json();
-    return data.stargazers_count || null;
+    return data.stargazers_count ?? null;
   } catch {
     return null;
   }
@@ -52,16 +52,10 @@ export default async function CommunityPage() {
   ]);
 
   return (
-    <>
-      <Navbar />
-      <main className="min-h-screen pt-24 pb-16 px-4 md:px-8 lg:px-16">
-        <div className="max-w-5xl mx-auto">
-          <Header />
-          <Stats npmDownloads={npmDownloads} githubStars={githubStars} />
-        </div>
-      </main>
-      <Footer />
-    </>
+    <main className="py-16 px-4">
+      <Header />
+      <Stats npmDownloads={npmDownloads} githubStars={githubStars} />
+    </main>
   );
 }
 

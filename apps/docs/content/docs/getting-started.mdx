@@ -20,22 +20,22 @@ Install all packages:
 <Tabs items={['npm', 'pnpm', 'yarn', 'bun']}>
   <Tab value="npm">
 ```bash title="terminal"
-npm install @misque/core @misque/quran @misque/prayer-times @misque/hijri @misque/qibla
+npm install @misque/core @misque/quran @misque/prayer-times @misque/hijri @misque/qibla @misque/mosques-finder @misque/zakat
 ```
   </Tab>
   <Tab value="pnpm">
 ```bash title="terminal"
-pnpm add @misque/core @misque/quran @misque/prayer-times @misque/hijri @misque/qibla
+pnpm add @misque/core @misque/quran @misque/prayer-times @misque/hijri @misque/qibla @misque/mosques-finder @misque/zakat
 ```
   </Tab>
   <Tab value="yarn">
 ```bash title="terminal"
-yarn add @misque/core @misque/quran @misque/prayer-times @misque/hijri @misque/qibla
+yarn add @misque/core @misque/quran @misque/prayer-times @misque/hijri @misque/qibla @misque/mosques-finder @misque/zakat
 ```
   </Tab>
   <Tab value="bun">
 ```bash title="terminal"
-bun add @misque/core @misque/quran @misque/prayer-times @misque/hijri @misque/qibla
+bun add @misque/core @misque/quran @misque/prayer-times @misque/hijri @misque/qibla @misque/mosques-finder @misque/zakat
 ```
   </Tab>
 </Tabs>
@@ -50,6 +50,12 @@ npm install @misque/quran
 
 # Just prayer times
 npm install @misque/prayer-times
+
+# Find nearby mosques
+npm install @misque/mosques-finder
+
+# Zakat calculator
+npm install @misque/zakat
 ```
   </Tab>
   <Tab value="pnpm">
@@ -59,6 +65,12 @@ pnpm add @misque/quran
 
 # Just prayer times
 pnpm add @misque/prayer-times
+
+# Find nearby mosques
+pnpm add @misque/mosques-finder
+
+# Zakat calculator
+pnpm add @misque/zakat
 ```
   </Tab>
   <Tab value="yarn">
@@ -68,6 +80,12 @@ yarn add @misque/quran
 
 # Just prayer times
 yarn add @misque/prayer-times
+
+# Find nearby mosques
+yarn add @misque/mosques-finder
+
+# Zakat calculator
+yarn add @misque/zakat
 ```
   </Tab>
   <Tab value="bun">
@@ -77,6 +95,12 @@ bun add @misque/quran
 
 # Just prayer times
 bun add @misque/prayer-times
+
+# Find nearby mosques
+bun add @misque/mosques-finder
+
+# Zakat calculator
+bun add @misque/zakat
 ```
   </Tab>
 </Tabs>
@@ -187,6 +211,61 @@ if (result.success) {
   // Or convert any bearing manually
   const compass = bearingToCompassDirection(118.98);
   console.log(compass); // "ESE"
+}
+```
+
+### Mosques Finder
+
+```typescript title="mosques-finder-example.ts"
+import { findMosques, findNearestMosque } from '@misque/mosques-finder';
+
+const location = { latitude: 51.5074, longitude: -0.1278 }; // London
+
+// Find nearby mosques (uses OpenStreetMap data)
+const result = await findMosques(location, {
+  radius: 5000, // 5km radius
+  limit: 10
+});
+
+if (result.success) {
+  console.log(result.data.mosques); // Array of mosques with name, address, distance
+  console.log(result.data.total);   // Total count
+}
+
+// Find the single nearest mosque
+const nearest = await findNearestMosque(location);
+if (nearest.success) {
+  console.log(nearest.data.name);     // "East London Mosque"
+  console.log(nearest.data.distance); // 1.2 (km)
+}
+```
+
+### Zakat Calculator
+
+```typescript title="zakat-example.ts"
+import { calculateZakat, getNisabThresholds } from '@misque/zakat';
+
+// Get current nisab thresholds (fetches live gold/silver prices)
+const nisab = await getNisabThresholds('USD');
+if (nisab.success) {
+  console.log(nisab.data.gold);   // Nisab in USD based on 85g gold
+  console.log(nisab.data.silver); // Nisab in USD based on 595g silver
+}
+
+// Calculate zakat on assets
+const result = await calculateZakat({
+  assets: [
+    { type: 'cash', amount: 50000, currency: 'USD' },
+    { type: 'gold', weight: 100, purity: 0.916 }, // 22k gold in grams
+  ],
+  madhab: 'hanafi', // 'hanafi' | 'shafii' | 'maliki' | 'hanbali'
+  currency: 'USD',
+});
+
+if (result.success) {
+  console.log(result.data.totalZakat);     // Total zakat due
+  console.log(result.data.breakdown);      // Per-asset breakdown
+  console.log(result.data.meetsNisab);     // Whether nisab threshold is met
 }
 ```
 
