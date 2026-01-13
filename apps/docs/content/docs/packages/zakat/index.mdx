@@ -1,0 +1,382 @@
+---
+title: 'Zakat'
+description: Comprehensive Islamic zakat calculator with multi-madhab support.
+icon: Calculator
+---
+
+# Zakat Calculator
+
+A comprehensive Islamic zakat calculator supporting all major asset types and four madhabs (schools of jurisprudence). Calculate zakat on cash, gold, silver, business inventory, stocks, cryptocurrency, agricultural produce, and livestock.
+
+## Installation
+
+<Tabs items={['npm', 'pnpm', 'yarn', 'bun']}>
+  <Tab value="npm">
+  ```bash title="terminal"
+  npm install @misque/zakat
+  ```
+  </Tab>
+  <Tab value="pnpm">
+  ```bash title="terminal"
+  pnpm add @misque/zakat
+  ```
+  </Tab>
+  <Tab value="yarn">
+  ```bash title="terminal"
+  yarn add @misque/zakat
+  ```
+  </Tab>
+  <Tab value="bun">
+  ```bash title="terminal"
+  bun add @misque/zakat
+  ```
+  </Tab>
+</Tabs>
+
+## Quick Start
+
+```typescript title="quick-start.ts"
+import { calculateZakat, createMockMetalPrices } from '@misque/zakat';
+
+const result = await calculateZakat({
+  assets: [
+    { type: 'cash', amount: 50000, currency: 'USD' },
+    { type: 'gold', weightGrams: 100, purity: 0.916 }, // 22k gold
+  ],
+  madhab: 'hanafi',
+  metalPrices: createMockMetalPrices('USD', 62, 0.75), // Gold $62/g, Silver $0.75/g
+});
+
+if (result.success) {
+  console.log(result.data.nisabMet); // true
+  console.log(result.data.totalZakatDue); // ~1392.45 USD
+  console.log(result.data.breakdown); // Detailed breakdown by asset
+}
+```
+
+## Asset Types
+
+### Cash and Savings
+
+```typescript title="cash-zakat.ts"
+import { calculateZakat } from '@misque/zakat';
+
+const result = await calculateZakat({
+  assets: [
+    { type: 'cash', amount: 10000, currency: 'USD' },
+    { type: 'cash', amount: 5000, currency: 'EUR', description: 'Savings Account' },
+  ],
+  metalPrices: createMockMetalPrices(),
+});
+
+if (result.success) {
+  // 2.5% zakat on total cash
+  console.log(result.data.totalZakatDue); // 375 (2.5% of 15000)
+}
+```
+
+### Gold and Silver
+
+```typescript title="gold-silver-zakat.ts"
+import { calculateZakat, NISAB_GOLD_GRAMS, NISAB_SILVER_GRAMS } from '@misque/zakat';
+
+const result = await calculateZakat({
+  assets: [
+    { type: 'gold', weightGrams: 100 }, // Pure 24k gold
+    { type: 'gold', weightGrams: 50, purity: 0.916, isWornJewelry: true }, // 22k jewelry
+    { type: 'silver', weightGrams: 500 },
+  ],
+  madhab: 'hanafi', // Hanafi: zakat due on worn jewelry
+  metalPrices: createMockMetalPrices(),
+});
+
+// Nisab thresholds:
+// Gold: 85 grams (NISAB_GOLD_GRAMS)
+// Silver: 595 grams (NISAB_SILVER_GRAMS)
+```
+
+### Business Assets
+
+```typescript title="business-zakat.ts"
+const result = await calculateZakat({
+  assets: [
+    {
+      type: 'business',
+      inventoryValue: 50000, // Market value of inventory
+      cash: 10000, // Cash in business
+      receivables: 5000, // Money owed to you
+      currency: 'USD',
+    },
+  ],
+  madhab: 'shafii', // Shafii includes receivables in calculation
+  metalPrices: createMockMetalPrices(),
+});
+```
+
+### Stocks and Investments
+
+```typescript title="stocks-zakat.ts"
+const result = await calculateZakat({
+  assets: [
+    { type: 'stocks', marketValue: 25000, currency: 'USD', isForTrading: true },
+    { type: 'crypto', marketValue: 10000, currency: 'USD', symbol: 'BTC' },
+  ],
+  metalPrices: createMockMetalPrices(),
+});
+```
+
+### Agricultural Produce
+
+Zakat on agricultural produce varies by irrigation method:
+- **Natural irrigation (rain-fed)**: 10%
+- **Artificial irrigation**: 5%
+- **Mixed**: 7.5%
+
+```typescript title="agricultural-zakat.ts"
+const result = await calculateZakat({
+  assets: [
+    {
+      type: 'agricultural',
+      produceType: 'wheat',
+      harvestValue: 10000,
+      currency: 'USD',
+      irrigationMethod: 'natural', // 10% zakat
+    },
+    {
+      type: 'agricultural',
+      produceType: 'rice',
+      harvestValue: 8000,
+      currency: 'USD',
+      irrigationMethod: 'artificial', // 5% zakat
+    },
+  ],
+  metalPrices: createMockMetalPrices(),
+});
+```
+
+### Livestock
+
+Livestock zakat is paid in animals, not currency. Animals must be free-grazing (sa'imah):
+
+```typescript title="livestock-zakat.ts"
+const result = await calculateZakat({
+  assets: [
+    { type: 'livestock', livestockType: 'sheep_goats', count: 100, isFreeGrazing: true },
+    { type: 'livestock', livestockType: 'cattle', count: 50, isFreeGrazing: true },
+    { type: 'livestock', livestockType: 'camels', count: 30, isFreeGrazing: true },
+  ],
+  metalPrices: createMockMetalPrices(),
+});
+
+if (result.success) {
+  result.data.breakdown.forEach((asset) => {
+    if ('animalsDue' in asset) {
+      console.log(asset.animalsDue); // [{ type: 'sheep_goats', count: 1, description: '1 sheep' }]
+    }
+  });
+}
+```
+
+## Madhab Support
+
+The calculator supports four major schools of Islamic jurisprudence:
+
+| Madhab | Worn Jewelry | Debt Deduction | Receivables |
+| ------ | ------------ | -------------- | ----------- |
+| Hanafi | Zakat due | All debts | When received |
+| Shafii | Exempt | Immediate debts | Include now |
+| Maliki | Exempt | Non-apparent wealth | When received |
+| Hanbali | Exempt | Diminishing | Include if collectible |
+
+```typescript title="madhab-rules.ts"
+import { getMadhabRules, isJewelryExempt } from '@misque/zakat';
+
+// Get full rules for a madhab
+const rules = getMadhabRules('hanafi');
+console.log(rules.jewelryExempt); // false
+console.log(rules.debtDeduction); // 'all'
+
+// Quick check for jewelry exemption
+console.log(isJewelryExempt('hanafi')); // false
+console.log(isJewelryExempt('shafii')); // true
+```
+
+## Debt Deductions
+
+Debts can be deducted from zakatable wealth (varies by madhab):
+
+```typescript title="debt-deduction.ts"
+const result = await calculateZakat({
+  assets: [{ type: 'cash', amount: 50000, currency: 'USD' }],
+  debts: [
+    { amount: 10000, currency: 'USD', debtType: 'loan', dueWithinYear: true },
+    { amount: 5000, currency: 'USD', debtType: 'credit_card' },
+  ],
+  madhab: 'hanafi', // Deducts all debts
+  metalPrices: createMockMetalPrices(),
+});
+
+if (result.success) {
+  console.log(result.data.totalDebts); // 15000
+  console.log(result.data.netZakatableAmount); // 35000
+  console.log(result.data.totalZakatDue); // 875 (2.5% of 35000)
+}
+```
+
+## Nisab Thresholds
+
+Get current nisab values based on metal prices:
+
+```typescript title="nisab.ts"
+import { getNisabThresholds, NISAB_GOLD_GRAMS, NISAB_SILVER_GRAMS } from '@misque/zakat';
+
+const result = await getNisabThresholds('USD', {
+  metalPrices: createMockMetalPrices('USD', 62, 0.75),
+});
+
+if (result.success) {
+  console.log(result.data.goldGrams); // 85
+  console.log(result.data.silverGrams); // 595
+  console.log(result.data.goldValue); // 5270 USD
+  console.log(result.data.silverValue); // 446.25 USD
+  console.log(result.data.recommendedNisab); // 'silver' (lower threshold)
+}
+```
+
+## Calculator Instance
+
+Create a reusable calculator with default configuration:
+
+```typescript title="calculator-instance.ts"
+import { createZakatCalculator } from '@misque/zakat';
+
+const calculator = createZakatCalculator({
+  defaultMadhab: 'shafii',
+  defaultCurrency: 'MYR',
+  useGoldNisab: false, // Use silver nisab (lower threshold)
+  cacheOptions: {
+    ttl: 3600000, // Cache metal prices for 1 hour
+    maxEntries: 50,
+  },
+});
+
+// Calculate zakat
+const result = await calculator.calculate({
+  assets: [{ type: 'cash', amount: 100000, currency: 'MYR' }],
+});
+
+// Get nisab
+const nisab = await calculator.getNisab('MYR');
+
+// Cache management
+console.log(calculator.getCacheStats()); // { size: 1, hits: 0, misses: 1 }
+calculator.clearCache();
+```
+
+## Metal Prices API
+
+The package supports external APIs for live gold/silver prices:
+
+```typescript title="metal-prices.ts"
+import { fetchMetalPrices, createMockMetalPrices } from '@misque/zakat';
+
+// Fetch from API (requires API key)
+const pricesResult = await fetchMetalPrices('USD', {
+  apiKey: 'your-goldapi-key',
+  timeout: 10000,
+});
+
+// Or use mock prices for testing/offline
+const mockPrices = createMockMetalPrices('USD', 65, 0.80);
+```
+
+## Error Handling
+
+All functions return a Result type with explicit error handling:
+
+```typescript title="error-handling.ts"
+import { calculateZakat } from '@misque/zakat';
+
+const result = await calculateZakat({
+  assets: [{ type: 'cash', amount: -100, currency: 'USD' }], // Invalid!
+});
+
+if (!result.success) {
+  console.log(result.error.code); // 'INVALID_AMOUNT'
+  console.log(result.error.message); // 'Cash amount must be a non-negative number'
+}
+```
+
+### Error Codes
+
+| Code | Description |
+| ---- | ----------- |
+| `INVALID_AMOUNT` | Negative or invalid monetary amount |
+| `INVALID_WEIGHT` | Negative or invalid weight for gold/silver |
+| `INVALID_PURITY` | Purity must be between 0 and 1 |
+| `INVALID_MADHAB` | Unknown madhab specified |
+| `INVALID_CURRENCY` | Missing or invalid currency code |
+| `NO_ASSETS` | No assets provided for calculation |
+| `NETWORK_ERROR` | Failed to fetch metal prices |
+| `RATE_LIMITED` | API rate limit exceeded |
+| `TIMEOUT` | Request timed out |
+
+## Types
+
+```typescript title="types.ts"
+import type {
+  // Asset types
+  AssetInput,
+  CashAssetInput,
+  GoldAssetInput,
+  SilverAssetInput,
+  BusinessAssetInput,
+  StockAssetInput,
+  CryptoAssetInput,
+  AgriculturalAssetInput,
+  LivestockAssetInput,
+
+  // Result types
+  ZakatCalculationInput,
+  ZakatCalculationResult,
+  AssetZakatBreakdown,
+  NisabThresholds,
+
+  // Config types
+  ZakatCalculatorConfig,
+  CalculateZakatOptions,
+  Madhab,
+  CurrencyCode,
+
+  // Error types
+  ZakatError,
+  ZakatErrorCode,
+} from '@misque/zakat';
+```
+
+## Constants
+
+```typescript title="constants.ts"
+import {
+  NISAB_GOLD_GRAMS, // 85
+  NISAB_SILVER_GRAMS, // 595
+  ZAKAT_RATE, // 0.025 (2.5%)
+  AGRICULTURAL_RATE_NATURAL, // 0.10 (10%)
+  AGRICULTURAL_RATE_ARTIFICIAL, // 0.05 (5%)
+  AGRICULTURAL_RATE_MIXED, // 0.075 (7.5%)
+  DEFAULT_CURRENCY, // 'USD'
+  DEFAULT_MADHAB, // 'hanafi'
+} from '@misque/zakat';
+```
+
+## Important Notes
+
+1. **Nisab**: Zakat is only due when your net wealth exceeds the nisab threshold. Silver nisab (~$446) is lower than gold nisab (~$5,270), so more people qualify using silver.
+
+2. **Hawl**: In Islamic jurisprudence, one lunar year (hawl) must pass while possessing the nisab for zakat to be due on wealth assets. Agricultural and treasure zakats are due at harvest/discovery time.
+
+3. **Purity**: When calculating gold/silver zakat, specify the purity (24k = 1.0, 22k = 0.916, 18k = 0.750) for accurate calculations.
+
+4. **Jewelry**: Hanafi madhab requires zakat on all gold/silver including worn jewelry. Other madhabs exempt jewelry worn for personal use.
+
+5. **Livestock**: Only free-grazing (sa'imah) animals that graze most of the year on public pastures are zakatable. Animals that are fed at home are generally not subject to zakat.

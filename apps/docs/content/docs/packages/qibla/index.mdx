@@ -1,9 +1,10 @@
 ---
-title: "@misque/qibla"
+title: 'Qibla'
 description: Calculate Qibla direction from any coordinates.
+icon: Compass
 ---
 
-# @misque/qibla
+# Qibla
 
 Calculate the Qibla direction from any location. Muslims face the Qibla (direction of the Kaaba in Makkah) during the five daily prayers and other acts of worship.
 
@@ -11,24 +12,24 @@ Calculate the Qibla direction from any location. Muslims face the Qibla (directi
 
 <Tabs items={['npm', 'pnpm', 'yarn', 'bun']}>
   <Tab value="npm">
-```bash title="terminal"
-npm install @misque/qibla
-```
+  ```bash title="terminal" 
+  npm install @misque/qibla 
+  ```
   </Tab>
   <Tab value="pnpm">
-```bash title="terminal"
-pnpm add @misque/qibla
-```
+  ```bash title="terminal" 
+  pnpm add @misque/qibla 
+  ```
   </Tab>
   <Tab value="yarn">
-```bash title="terminal"
-yarn add @misque/qibla
-```
+  ```bash title="terminal" 
+  yarn add @misque/qibla 
+  ```
   </Tab>
   <Tab value="bun">
-```bash title="terminal"
-bun add @misque/qibla
-```
+  ```bash title="terminal" 
+  bun add @misque/qibla 
+  ```
   </Tab>
 </Tabs>
 
@@ -44,8 +45,8 @@ const location = {
 
 const result = calculateQibla(location);
 if (result.success) {
-  console.log(result.data.bearing);          // 118.98 (degrees from North)
-  console.log(result.data.distance);         // 4585.2 (km to Kaaba)
+  console.log(result.data.bearing); // 118.98 (degrees from North)
+  console.log(result.data.distance); // 4585.2 (km to Kaaba)
   console.log(result.data.compassDirection); // "ESE"
 }
 ```
@@ -63,7 +64,7 @@ const nyResult = calculateQibla({
   longitude: -74.006,
 });
 if (nyResult.success) {
-  console.log(nyResult.data.bearing);  // ~58.48° (roughly ENE)
+  console.log(nyResult.data.bearing); // ~58.48° (roughly ENE)
   console.log(nyResult.data.distance); // ~9531 km
 }
 
@@ -73,7 +74,7 @@ const tokyoResult = calculateQibla({
   longitude: 139.6503,
 });
 if (tokyoResult.success) {
-  console.log(tokyoResult.data.bearing);  // ~293.02° (roughly WNW)
+  console.log(tokyoResult.data.bearing); // ~293.02° (roughly WNW)
   console.log(tokyoResult.data.distance); // ~8832 km
 }
 ```
@@ -98,16 +99,16 @@ if (result.success) {
 
 ### 16-Point Compass Rose
 
-| Direction | Range (°) | Direction | Range (°) |
-|-----------|-----------|-----------|-----------|
-| N | 348.75 - 11.25 | S | 168.75 - 191.25 |
-| NNE | 11.25 - 33.75 | SSW | 191.25 - 213.75 |
-| NE | 33.75 - 56.25 | SW | 213.75 - 236.25 |
-| ENE | 56.25 - 78.75 | WSW | 236.25 - 258.75 |
-| E | 78.75 - 101.25 | W | 258.75 - 281.25 |
-| ESE | 101.25 - 123.75 | WNW | 281.25 - 303.75 |
-| SE | 123.75 - 146.25 | NW | 303.75 - 326.25 |
-| SSE | 146.25 - 168.75 | NNW | 326.25 - 348.75 |
+| Direction | Range (°)       | Direction | Range (°)       |
+| --------- | --------------- | --------- | --------------- |
+| N         | 348.75 - 11.25  | S         | 168.75 - 191.25 |
+| NNE       | 11.25 - 33.75   | SSW       | 191.25 - 213.75 |
+| NE        | 33.75 - 56.25   | SW        | 213.75 - 236.25 |
+| ENE       | 56.25 - 78.75   | WSW       | 236.25 - 258.75 |
+| E         | 78.75 - 101.25  | W         | 258.75 - 281.25 |
+| ESE       | 101.25 - 123.75 | WNW       | 281.25 - 303.75 |
+| SE        | 123.75 - 146.25 | NW        | 303.75 - 326.25 |
+| SSE       | 146.25 - 168.75 | NNW       | 326.25 - 348.75 |
 
 ## Formatting
 
@@ -117,7 +118,7 @@ import { calculateQibla, formatQiblaBearing } from '@misque/qibla';
 const result = calculateQibla({ latitude: 51.5074, longitude: -0.1278 });
 if (result.success) {
   // Format with direction
-  formatQiblaBearing(result.data.bearing);       // "119° (ESE)"
+  formatQiblaBearing(result.data.bearing); // "119° (ESE)"
 
   // Format without direction
   formatQiblaBearing(result.data.bearing, false); // "119°"
@@ -134,11 +135,11 @@ const kaaba = getKaabaCoordinates();
 console.log(kaaba); // { latitude: 21.4225, longitude: 39.8262 }
 
 // Check if at Kaaba (within 100m)
-isAtKaaba({ latitude: 21.4225, longitude: 39.8262 });     // true
-isAtKaaba({ latitude: 51.5074, longitude: -0.1278 });      // false
+isAtKaaba({ latitude: 21.4225, longitude: 39.8262 }); // true
+isAtKaaba({ latitude: 51.5074, longitude: -0.1278 }); // false
 
 // Custom threshold (1km)
-isAtKaaba({ latitude: 21.4230, longitude: 39.8270 }, 1);   // true
+isAtKaaba({ latitude: 21.423, longitude: 39.827 }, 1); // true
 ```
 
 ## QiblaCompass Class
@@ -149,16 +150,16 @@ For interactive compass applications with device orientation support:
 import { QiblaCompass, createQiblaCompass } from '@misque/qibla';
 
 // Create compass instance
-const compass = new QiblaCompass({ latitude: 40.7128, longitude: -74.0060 });
+const compass = new QiblaCompass({ latitude: 40.7128, longitude: -74.006 });
 
 // Or use factory function
-const compass2 = createQiblaCompass({ latitude: 40.7128, longitude: -74.0060 });
+const compass2 = createQiblaCompass({ latitude: 40.7128, longitude: -74.006 });
 
 // Get bearing and direction
-console.log(compass.getBearing());           // 58.48
-console.log(compass.getBearingFormatted());  // "58.5°"
+console.log(compass.getBearing()); // 58.48
+console.log(compass.getBearingFormatted()); // "58.5°"
 console.log(compass.getCardinalDirection()); // "NE"
-console.log(compass.getDistance());          // 9531 km
+console.log(compass.getDistance()); // 9531 km
 ```
 
 ### Device Orientation (Browser)
@@ -166,7 +167,7 @@ console.log(compass.getDistance());          // 9531 km
 ```typescript title="device-orientation.ts"
 import { QiblaCompass } from '@misque/qibla';
 
-const compass = new QiblaCompass({ latitude: 40.7128, longitude: -74.0060 });
+const compass = new QiblaCompass({ latitude: 40.7128, longitude: -74.006 });
 
 // Check if device orientation is supported
 if (QiblaCompass.isOrientationSupported()) {
@@ -201,22 +202,22 @@ For custom compass implementations:
 ```typescript title="manual-compass.ts"
 import { QiblaCompass } from '@misque/qibla';
 
-const compass = new QiblaCompass({ latitude: 40.7128, longitude: -74.0060 });
+const compass = new QiblaCompass({ latitude: 40.7128, longitude: -74.006 });
 
 // Get visualization with a device heading
 function onCompassUpdate(deviceHeading: number) {
   const viz = compass.getVisualization(deviceHeading);
 
   // Use visualization data
-  console.log(viz.qiblaBearing);     // 58.48
-  console.log(viz.deviceHeading);    // Current device heading
-  console.log(viz.angleDifference);  // -45 (negative = turn left)
-  console.log(viz.turnDirection);    // "left", "right", or "aligned"
+  console.log(viz.qiblaBearing); // 58.48
+  console.log(viz.deviceHeading); // Current device heading
+  console.log(viz.angleDifference); // -45 (negative = turn left)
+  console.log(viz.turnDirection); // "left", "right", or "aligned"
   console.log(viz.alignmentDistance); // 45 (absolute degrees to turn)
 }
 
 // Update location if user moves
-compass.updateCoordinates({ latitude: 40.7200, longitude: -74.0100 });
+compass.updateCoordinates({ latitude: 40.72, longitude: -74.01 });
 ```
 
 ## Options
@@ -240,8 +241,8 @@ import { QiblaCompass } from '@misque/qibla';
 const compass = new QiblaCompass(
   { latitude: 51.5074, longitude: -0.1278 },
   {
-    useTrueNorth: true,        // Use true north instead of magnetic
-    alignmentThreshold: 3,     // Degrees tolerance for "aligned" status
+    useTrueNorth: true, // Use true north instead of magnetic
+    alignmentThreshold: 3, // Degrees tolerance for "aligned" status
     onOrientationChange: (viz) => {
       // Handle orientation updates
     },

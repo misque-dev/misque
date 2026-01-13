@@ -1,9 +1,10 @@
 ---
-title: "@misque/quran"
+title: 'Quran'
 description: Quran text, translations, audio, and search APIs for JavaScript applications.
+icon: BookOpen
 ---
 
-# @misque/quran
+# Quran
 
 Complete Quran data access with support for text, translations, audio, and search.
 
@@ -46,7 +47,7 @@ console.log(`Total surahs: ${surahs.length}`); // 114
 // Get a specific surah
 const fatiha = quran.getSurah(1);
 console.log(fatiha?.nameTransliterated); // "Al-Fatihah"
-console.log(fatiha?.numberOfAyahs);       // 7
+console.log(fatiha?.numberOfAyahs); // 7
 
 // Get a specific ayah
 const ayah = quran.getAyah(1, 1);
@@ -55,17 +56,17 @@ console.log(ayah?.text); // Arabic text of Bismillah
 
 ## Factory Functions
 
-### createQuran()
+### Basic Instance
 
-Creates a Quran instance with all data loaded.
+Create a Quran instance with all data loaded using `createQuran()`.
 
 ```typescript title="create-quran.ts"
 const quran = createQuran();
 ```
 
-### createQuranSession(reciterId)
+### Session with Reciter
 
-Creates a simplified session for working with a specific reciter.
+Create a simplified session for working with a specific reciter using `createQuranSession()`.
 
 ```typescript title="create-session.ts"
 const session = createQuranSession('alzain');
@@ -77,9 +78,9 @@ const surahs = session.surahs;
 const { audioUrl, fullText, surah } = session.getPlayerData(1);
 ```
 
-### createQuranWithReciter(reciterId)
+### Pre-configured Reciter
 
-Creates a Quran instance with a preferred reciter pre-set.
+Create a Quran instance with a preferred reciter pre-set using `createQuranWithReciter()`.
 
 ```typescript title="create-with-reciter.ts"
 const quran = createQuranWithReciter('alzain');
