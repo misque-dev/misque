@@ -1,5 +1,11 @@
 # @misque/zakat
 
+## 0.2.1
+
+### Patch Changes
+
+- d2b1f4f: Republish packages with new version to resolve npm publish conflict
+
 ## 0.2.0
 
 ### Minor Changes
