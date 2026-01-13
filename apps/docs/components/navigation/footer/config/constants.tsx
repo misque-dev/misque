@@ -4,6 +4,7 @@ export const footerLinks = {
     { label: '@misque/prayer-times', href: '/docs/packages/prayer-times' },
     { label: '@misque/qibla', href: '/docs/packages/qibla' },
     { label: '@misque/hijri', href: '/docs/packages/hijri' },
+    { label: '@misque/mosques-finder', href: '/docs/packages/mosques-finder' },
   ],
   resources: [
     { label: 'Documentation', href: '/docs' },

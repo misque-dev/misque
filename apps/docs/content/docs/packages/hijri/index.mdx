@@ -1,9 +1,10 @@
 ---
-title: "@misque/hijri"
+title: 'Hijri'
 description: Hijri (Islamic) calendar conversion and utilities.
+icon: Calendar
 ---
 
-# @misque/hijri
+# Hijri
 
 Convert between Gregorian and Hijri (Islamic) calendars with formatting support. The Hijri calendar is a lunar calendar used by Muslims worldwide to determine religious dates and events.
 
@@ -96,7 +97,7 @@ import { convert } from '@misque/hijri';
 // Get both dates and Julian Day
 const result = convert(new Date());
 if (result.success) {
-  console.log(result.data.hijri);     // { year: 1446, month: 6, day: 15 }
+  console.log(result.data.hijri); // { year: 1446, month: 6, day: 15 }
   console.log(result.data.gregorian); // { year: 2024, month: 12, day: 17 }
   console.log(result.data.julianDay); // 2460661.5
 }
@@ -141,10 +142,10 @@ import { getHijriDateInfo } from '@misque/hijri';
 
 const info = getHijriDateInfo({ year: 1446, month: 9, day: 1 });
 
-console.log(info.monthName);        // "Ramadan"
-console.log(info.monthNameArabic);  // "رمضان"
-console.log(info.dayOfWeekName);    // "Friday"
-console.log(info.isLeapYear);       // true or false
+console.log(info.monthName); // "Ramadan"
+console.log(info.monthNameArabic); // "رمضان"
+console.log(info.dayOfWeekName); // "Friday"
+console.log(info.isLeapYear); // true or false
 ```
 
 ## Month Names
@@ -153,8 +154,8 @@ console.log(info.isLeapYear);       // true or false
 import { getMonthName, getYearMonths } from '@misque/hijri';
 
 // Get a specific month name
-getMonthName(9);        // "Ramadan"
-getMonthName(9, true);  // "رمضان" (Arabic)
+getMonthName(9); // "Ramadan"
+getMonthName(9, true); // "رمضان" (Arabic)
 
 // Get all months for a year
 const months = getYearMonths(1446);
@@ -188,19 +189,25 @@ getYearLength(1446); // 354 or 355
 ## Date Manipulation
 
 ```typescript title="date-manipulation.ts"
-import { addDays, addMonths, addYears, compareDates, getDaysDifference } from '@misque/hijri';
+import {
+  addDays,
+  addMonths,
+  addYears,
+  compareDates,
+  getDaysDifference,
+} from '@misque/hijri';
 
 const date = { year: 1446, month: 9, day: 1 };
 
 // Add days
-addDays(date, 10);   // { year: 1446, month: 9, day: 11 }
-addDays(date, -5);   // { year: 1446, month: 8, day: 26 }
+addDays(date, 10); // { year: 1446, month: 9, day: 11 }
+addDays(date, -5); // { year: 1446, month: 8, day: 26 }
 
 // Add months
-addMonths(date, 3);  // { year: 1446, month: 12, day: 1 }
+addMonths(date, 3); // { year: 1446, month: 12, day: 1 }
 
 // Add years
-addYears(date, 1);   // { year: 1447, month: 9, day: 1 }
+addYears(date, 1); // { year: 1447, month: 9, day: 1 }
 
 // Compare dates
 const date1 = { year: 1446, month: 9, day: 1 };
@@ -231,7 +238,7 @@ isDhulHijjah(date); // false
 
 // Get first/last day of month
 getFirstDayOfMonth(1446, 9); // { year: 1446, month: 9, day: 1 }
-getLastDayOfMonth(1446, 9);  // { year: 1446, month: 9, day: 30 }
+getLastDayOfMonth(1446, 9); // { year: 1446, month: 9, day: 30 }
 ```
 
 ## Types

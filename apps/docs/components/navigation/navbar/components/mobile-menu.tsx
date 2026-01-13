@@ -8,6 +8,7 @@ import {
   Calendar,
   Rocket,
   FileText,
+  MapPin,
 } from 'lucide-react';
 import { navbarLinks } from '@/components/navigation/navbar/config/constants';
 import { MobileNav } from '@/components/navigation/navbar/components/mobile-nav';
@@ -30,6 +31,11 @@ const docsLinks = [
   },
   { title: '@misque/qibla', href: '/docs/packages/qibla', icon: Compass },
   { title: '@misque/hijri', href: '/docs/packages/hijri', icon: Calendar },
+  {
+    title: '@misque/mosques-finder',
+    href: '/docs/packages/mosques-finder',
+    icon: MapPin,
+  },
 ];
 
 export const MobileMenu = ({ pathname }: Props) => {

@@ -7,6 +7,8 @@
     "packages/quran",
     "packages/prayer-times",
     "packages/hijri",
-    "packages/qibla"
+    "packages/qibla",
+    "packages/mosques-finder",
+    "packages/zakat"
   ]
 }

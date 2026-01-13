@@ -53,7 +53,5 @@ tmp
 # package-lock.json
 # yarn.lock
 
-# Changeset
-.changeset/*.md
-!.changeset/config.json
+# Vercel
 .vercel

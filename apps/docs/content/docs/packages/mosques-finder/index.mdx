@@ -1,0 +1,338 @@
+---
+title: 'Mosques Finder'
+description: Find nearby mosques using OpenStreetMap data.
+icon: MapPin
+---
+
+# Mosques Finder
+
+Find nearby mosques using OpenStreetMap data. Works in both browser and Node.js environments with no API key required.
+
+## Installation
+
+<Tabs items={['npm', 'pnpm', 'yarn', 'bun']}>
+  <Tab value="npm">
+  ```bash title="terminal"
+  npm install @misque/mosques-finder
+  ```
+  </Tab>
+  <Tab value="pnpm">
+  ```bash title="terminal"
+  pnpm add @misque/mosques-finder
+  ```
+  </Tab>
+  <Tab value="yarn">
+  ```bash title="terminal"
+  yarn add @misque/mosques-finder
+  ```
+  </Tab>
+  <Tab value="bun">
+  ```bash title="terminal"
+  bun add @misque/mosques-finder
+  ```
+  </Tab>
+</Tabs>
+
+## Quick Start
+
+```typescript title="quick-start.ts"
+import { findMosques } from '@misque/mosques-finder';
+
+// Find mosques near a location
+const result = await findMosques({
+  latitude: 51.5074,
+  longitude: -0.1278, // London
+});
+
+if (result.success) {
+  console.log(`Found ${result.data.mosques.length} mosques`);
+  result.data.mosques.forEach((mosque) => {
+    console.log(`${mosque.name} - ${mosque.distance}km away`);
+  });
+}
+```
+
+## Finding Mosques
+
+### Basic Search
+
+Search for mosques within a radius of your location:
+
+```typescript title="basic-search.ts"
+import { findMosques } from '@misque/mosques-finder';
+
+const result = await findMosques(
+  { latitude: 40.7128, longitude: -74.006 }, // New York
+  {
+    radius: 5,      // Search radius in km (default: 5, max: 50)
+    limit: 20,      // Maximum results (default: 20)
+  }
+);
+
+if (result.success) {
+  const { mosques, origin, radius, totalCount, fromCache } = result.data;
+
+  console.log(`Found ${totalCount} mosques within ${radius}km`);
+  console.log(`Showing ${mosques.length} results`);
+  console.log(`From cache: ${fromCache}`);
+}
+```
+
+### Find Nearest Mosque
+
+Find the single closest mosque:
+
+```typescript title="find-nearest.ts"
+import { findNearestMosque } from '@misque/mosques-finder';
+
+const result = await findNearestMosque({
+  latitude: 51.5074,
+  longitude: -0.1278,
+});
+
+if (result.success && result.data) {
+  const mosque = result.data;
+  console.log(`Nearest: ${mosque.name}`);
+  console.log(`Distance: ${mosque.distance}km`);
+  console.log(`Address: ${mosque.address?.formatted}`);
+}
+```
+
+### Get Mosque by ID
+
+Retrieve a specific mosque using its OpenStreetMap ID:
+
+```typescript title="get-by-id.ts"
+import { getMosqueById } from '@misque/mosques-finder';
+
+// OSM IDs are in format: node/123, way/456, or relation/789
+const result = await getMosqueById('node/123456789');
+
+if (result.success && result.data) {
+  console.log(result.data.name);
+  console.log(result.data.website);
+}
+```
+
+## Factory Pattern
+
+For applications that make multiple searches, use the factory function to share configuration and cache:
+
+```typescript title="factory-pattern.ts"
+import { createMosqueFinder } from '@misque/mosques-finder';
+
+// Create a finder instance with custom defaults
+const finder = createMosqueFinder({
+  defaultRadius: 10,
+  defaultLimit: 50,
+  cacheOptions: {
+    ttl: 600000,    // 10 minutes
+    maxEntries: 200,
+  },
+});
+
+// Use the instance - cache is shared across calls
+const result1 = await finder.find({ latitude: 51.5074, longitude: -0.1278 });
+const result2 = await finder.find({ latitude: 51.5074, longitude: -0.1278 }); // Uses cache
+
+// Find nearest
+const nearest = await finder.findNearest({ latitude: 51.5074, longitude: -0.1278 });
+
+// Get by ID
+const mosque = await finder.getById('node/123456');
+
+// Cache management
+console.log(finder.getCacheStats()); // { size: 1, hits: 1, misses: 0 }
+finder.clearCache();
+```
+
+## Mosque Data
+
+Each mosque includes extended information when available:
+
+```typescript title="mosque-data.ts"
+import { findMosques } from '@misque/mosques-finder';
+
+const result = await findMosques({ latitude: 51.5155, longitude: -0.0723 });
+
+if (result.success) {
+  const mosque = result.data.mosques[0];
+
+  // Basic info
+  console.log(mosque.id);        // "node/123456"
+  console.log(mosque.name);      // "East London Mosque"
+  console.log(mosque.nameAr);    // "مسجد شرق لندن"
+  console.log(mosque.distance);  // 0.5 (km from search origin)
+
+  // Location
+  console.log(mosque.location);  // { latitude: 51.5155, longitude: -0.0723 }
+
+  // Contact
+  console.log(mosque.phone);     // "+44 20 7650 3000"
+  console.log(mosque.website);   // "https://eastlondonmosque.org.uk"
+  console.log(mosque.email);     // "info@eastlondonmosque.org.uk"
+
+  // Address
+  console.log(mosque.address?.street);     // "Whitechapel Road"
+  console.log(mosque.address?.city);       // "London"
+  console.log(mosque.address?.postcode);   // "E1 1JX"
+  console.log(mosque.address?.formatted);  // "82 Whitechapel Road, London, E1 1JX"
+
+  // Accessibility
+  console.log(mosque.wheelchair); // "yes", "no", "limited", or "unknown"
+
+  // Opening hours (raw OSM format)
+  console.log(mosque.openingHours?.raw); // "Mo-Su 05:00-22:00"
+
+  // Prayer times (if tagged in OSM)
+  console.log(mosque.prayerTimes?.fajr);   // "05:30"
+  console.log(mosque.prayerTimes?.jummah); // "13:30"
+
+  // All OSM tags for extended data
+  console.log(mosque.tags);
+}
+```
+
+## Options
+
+### FindMosquesOptions
+
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `radius` | `number` | `5` | Search radius in kilometers (max: 50) |
+| `limit` | `number` | `20` | Maximum number of results |
+| `timeout` | `number` | `10000` | Request timeout in milliseconds |
+| `useCache` | `boolean` | `true` | Whether to use caching |
+| `overpassEndpoint` | `string` | Overpass API | Custom Overpass API endpoint |
+| `signal` | `AbortSignal` | - | For request cancellation |
+
+### MosqueFinderConfig
+
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `defaultRadius` | `number` | `5` | Default search radius |
+| `defaultLimit` | `number` | `20` | Default result limit |
+| `defaultTimeout` | `number` | `10000` | Default timeout |
+| `cacheOptions.ttl` | `number` | `300000` | Cache time-to-live (5 min) |
+| `cacheOptions.maxEntries` | `number` | `100` | Maximum cache entries |
+| `overpassEndpoint` | `string` | Overpass API | Custom endpoint |
+
+## Error Handling
+
+All functions return a `Result` type for type-safe error handling:
+
+```typescript title="error-handling.ts"
+import { findMosques } from '@misque/mosques-finder';
+
+const result = await findMosques({ latitude: 91, longitude: 0 }); // Invalid!
+
+if (!result.success) {
+  console.error(result.error.code);    // 'INVALID_COORDINATES'
+  console.error(result.error.message); // 'Latitude must be between -90 and 90'
+
+  // Handle rate limiting
+  if (result.error.code === 'RATE_LIMITED') {
+    console.log(`Retry after ${result.error.retryAfter} seconds`);
+  }
+}
+```
+
+### Error Codes
+
+| Code | Description |
+|------|-------------|
+| `INVALID_COORDINATES` | Latitude or longitude out of valid range |
+| `NETWORK_ERROR` | Network request failed |
+| `TIMEOUT` | Request exceeded timeout |
+| `RATE_LIMITED` | Overpass API rate limit exceeded |
+| `PARSE_ERROR` | Failed to parse response |
+| `OVERPASS_ERROR` | Overpass API returned an error |
+| `ABORTED` | Request was cancelled via AbortSignal |
+
+## Request Cancellation
+
+Cancel long-running requests using `AbortController`:
+
+```typescript title="cancellation.ts"
+import { findMosques } from '@misque/mosques-finder';
+
+const controller = new AbortController();
+
+// Cancel after 5 seconds
+setTimeout(() => controller.abort(), 5000);
+
+const result = await findMosques(
+  { latitude: 51.5074, longitude: -0.1278 },
+  { signal: controller.signal }
+);
+
+if (!result.success && result.error.code === 'ABORTED') {
+  console.log('Request was cancelled');
+}
+```
+
+## With Geolocation API
+
+Use with the browser's Geolocation API:
+
+```typescript title="with-geolocation.ts"
+import { findMosques } from '@misque/mosques-finder';
+
+async function findNearbyMosques() {
+  return new Promise((resolve, reject) => {
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
+        const result = await findMosques({
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+        });
+        resolve(result);
+      },
+      (error) => reject(error),
+      { enableHighAccuracy: true }
+    );
+  });
+}
+
+const result = await findNearbyMosques();
+if (result.success) {
+  console.log(`Found ${result.data.mosques.length} mosques near you`);
+}
+```
+
+## Types
+
+```typescript title="types.ts"
+import type {
+  // Main types
+  Mosque,
+  MosqueAddress,
+  MosquePrayerTimes,
+  OpeningHours,
+
+  // Options
+  FindMosquesOptions,
+  FindMosquesResult,
+  MosqueFinderConfig,
+  MosqueFinderInstance,
+  CacheOptions,
+  CacheStats,
+
+  // Errors
+  MosqueFinderError,
+  MosqueFinderErrorCode,
+} from '@misque/mosques-finder';
+
+// Coordinates type from core
+import type { Coordinates } from '@misque/core';
+```
+
+## Data Source
+
+This package uses [OpenStreetMap](https://www.openstreetmap.org/) data via the [Overpass API](https://overpass-api.de/).
+
+Mosques are identified by these OSM tags:
+- `amenity=place_of_worship` + `religion=muslim`
+- `building=mosque`
+
+The data is contributed by volunteers worldwide and is free to use. Data quality and completeness varies by region.
